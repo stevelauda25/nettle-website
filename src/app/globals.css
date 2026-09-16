@@ -221,6 +221,26 @@
 }
 
 /* ---------------------------------------------------------------------------
+ * Motion
+ * Scroll-linked animations run on a CSS scroll/view timeline (no JS). Consumers
+ * attach a timeline and range and gate usage behind
+ * `supports-[animation-timeline:view()]` + `motion-safe`, so unsupported
+ * browsers and reduced-motion users get the static, full-size layout.
+ * ------------------------------------------------------------------------- */
+@theme {
+  --animate-scroll-scale-in: scroll-scale-in linear both;
+
+  @keyframes scroll-scale-in {
+    from {
+      scale: 0.75;
+    }
+    to {
+      scale: 1;
+    }
+  }
+}
+
+/* ---------------------------------------------------------------------------
  * Grid
  * Source: Figma layout grid on the Hero frames (desktop, 1440px canvas) —
  * every "Hero" / "Hero - Option N" frame in the file carries the identical

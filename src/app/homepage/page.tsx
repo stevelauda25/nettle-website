@@ -3,6 +3,8 @@ import Link from "next/link";
 import { PageGridOverlay } from "@/components/layout/grid";
 import { SiteHeader } from "@/components/layout/site-header";
 import { Hero } from "@/components/sections/hero/hero";
+import { KeyMetrics } from "@/components/sections/key-metrics/key-metrics";
+import { VideoExplainer } from "@/components/sections/video-explainer/video-explainer";
 
 export const metadata: Metadata = {
   title: "Homepage preview | Nettle",
@@ -18,6 +20,8 @@ export default async function HomepagePreview({ searchParams }: PageProps<"/home
       <SiteHeader />
       <main>
         <Hero />
+        <VideoExplainer />
+        <KeyMetrics />
       </main>
       <PageGridOverlay visible={gridOn} />
 
