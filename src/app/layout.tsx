@@ -1,5 +1,33 @@
 import type { Metadata } from "next";
+import { Crimson_Pro, La_Belle_Aurore } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
+
+// Figma: Heading/* text styles
+const crimsonPro = Crimson_Pro({
+  subsets: ["latin"],
+  weight: ["300", "400"],
+  display: "swap",
+  variable: "--font-crimson-pro",
+});
+
+// Figma: detached handwritten accent text (no text style)
+const laBelleAurore = La_Belle_Aurore({
+  subsets: ["latin"],
+  weight: "400",
+  display: "swap",
+  variable: "--font-la-belle-aurore",
+});
+
+// Figma: Body/* text styles
+const suisseIntl = localFont({
+  src: [
+    { path: "./fonts/SuisseIntl-Regular.ttf", weight: "400", style: "normal" },
+    { path: "./fonts/SuisseIntl-Medium.ttf", weight: "500", style: "normal" },
+  ],
+  display: "swap",
+  variable: "--font-suisse-intl",
+});
 
 export const metadata: Metadata = {
   title: "Nettle",
@@ -8,7 +36,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${crimsonPro.variable} ${laBelleAurore.variable} ${suisseIntl.variable}`}>
       <body>{children}</body>
     </html>
   );

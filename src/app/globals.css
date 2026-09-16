@@ -1,1 +1,303 @@
 @import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+ * Fonts
+ * Loaded in layout.tsx via next/font; exposed as font-heading / font-body.
+ * ------------------------------------------------------------------------- */
+@theme inline {
+  --font-heading: var(--font-crimson-pro);
+  --font-body: var(--font-suisse-intl);
+  --font-handwritten: var(--font-la-belle-aurore);
+}
+
+/* ---------------------------------------------------------------------------
+ * Colors
+ * Source: Figma variable collection "Colors" (mode: Default).
+ * Primitives only — Figma defines no semantic color variables yet.
+ * Tailwind's default palette is removed so only approved colors compile.
+ * `static` emits every token as a CSS variable, even when no utility uses it.
+ * ------------------------------------------------------------------------- */
+@theme static {
+  --color-*: initial;
+  --color-white: #fff;
+  --color-black: #000;
+
+  /* brand */
+  --color-brand-50: #fde2d6;
+  --color-brand-100: #fbc5af;
+  --color-brand-200: #f9a987;
+  --color-brand-300: #f78c5f;
+  --color-brand-400: #f56f37;
+  --color-brand-500: #f4530f;
+  --color-brand-600: #cb450c;
+  --color-brand-700: #a2370a;
+  --color-brand-800: #7a2907;
+  --color-brand-900: #511b05;
+  --color-brand-950: #280d02;
+
+  /* warm-gray */
+  --color-warm-gray-50: #fffdfb;
+  --color-warm-gray-100: #fffbf7;
+  --color-warm-gray-200: #fffaf3;
+  --color-warm-gray-300: #fff8ef;
+  --color-warm-gray-400: #fff6eb;
+  --color-warm-gray-500: #fff5e8;
+  --color-warm-gray-600: #d4ccc1;
+  --color-warm-gray-700: #aaa39a;
+  --color-warm-gray-800: #7f7a74;
+  --color-warm-gray-900: #55514d;
+  --color-warm-gray-950: #2a2826;
+
+  /* cold-gray */
+  --color-cold-gray-50: #d4d4d6;
+  --color-cold-gray-100: #abaaae;
+  --color-cold-gray-200: #818086;
+  --color-cold-gray-300: #57555e;
+  --color-cold-gray-400: #2d2b36;
+  --color-cold-gray-500: #03010e;
+  --color-cold-gray-600: #02000b;
+  --color-cold-gray-700: #020009;
+  --color-cold-gray-800: #010007;
+  --color-cold-gray-900: #010004;
+  --color-cold-gray-950: #000002;
+
+  /* neon-green */
+  --color-neon-green-50: #e6fffd;
+  --color-neon-green-100: #cefffc;
+  --color-neon-green-200: #b5fffb;
+  --color-neon-green-300: #9dfffa;
+  --color-neon-green-400: #84fff9;
+  --color-neon-green-500: #6cfff8;
+  --color-neon-green-600: #5ad4ce;
+  --color-neon-green-700: #48aaa5;
+  --color-neon-green-800: #367f7c;
+  --color-neon-green-900: #245552;
+  --color-neon-green-950: #122a29;
+}
+
+/* ---------------------------------------------------------------------------
+ * Base
+ * Page background/text colors are not defined as Figma variables; these are
+ * the most-used primitives in the latest Figma frames — pending design sign-off.
+ * ------------------------------------------------------------------------- */
+@layer base {
+  /* Disable rubber-band overscroll so the canvas never shows past the page edges. */
+  html,
+  body {
+    overscroll-behavior: none;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background-color: var(--color-warm-gray-100);
+    color: var(--color-warm-gray-900);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Typography
+ * Source: Figma local text styles. Desktop values only — Figma defines no
+ * responsive variants. Line height: Figma % → unitless; tracking: Figma % → em.
+ * ------------------------------------------------------------------------- */
+
+/* Heading/H1 */
+@utility text-heading-h1 {
+  font-family: var(--font-heading);
+  font-size: 64px;
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+
+/* Heading/H2 */
+@utility text-heading-h2 {
+  font-family: var(--font-heading);
+  font-size: 56px;
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+/* Heading/H3 */
+@utility text-heading-h3 {
+  font-family: var(--font-heading);
+  font-size: 52px;
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+
+/* Heading/H4 */
+@utility text-heading-h4 {
+  font-family: var(--font-heading);
+  font-size: 48px;
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+
+/* Heading/H5 */
+@utility text-heading-h5 {
+  font-family: var(--font-heading);
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+/* Heading/H6 */
+@utility text-heading-h6 {
+  font-family: var(--font-heading);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+/* Body/Large/Regular */
+@utility text-body-large-regular {
+  font-family: var(--font-body);
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: 0;
+}
+
+/* Body/Large/Medium */
+@utility text-body-large-medium {
+  font-family: var(--font-body);
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: 0;
+}
+
+/* Body/Medium/Regular */
+@utility text-body-medium-regular {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0;
+}
+
+/* Body/Medium/Medium */
+@utility text-body-medium-medium {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0;
+}
+
+/* Body/Small/Regular */
+@utility text-body-small-regular {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+}
+
+/* Body/Small/Medium */
+@utility text-body-small-medium {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+}
+
+/* Handwritten accent notes — no Figma text style exists; values taken from the
+   detached La Belle Aurore text in the Hero frame (16px / 120% / -2%). */
+@utility text-handwritten {
+  font-family: var(--font-handwritten);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+/* ---------------------------------------------------------------------------
+ * Grid
+ * Source: Figma layout grid on the Hero frames (desktop, 1440px canvas) —
+ * every "Hero" / "Hero - Option N" frame in the file carries the identical
+ * COLUMNS layout grid: 12 columns, 16px gutter, 32px margin (offset),
+ * STRETCH alignment. No tablet or mobile layout grid is defined in Figma.
+ *
+ * One source of truth: the Container / Grid / GridBand primitives
+ * (src/components/layout/grid/) and the dev-only grid overlay all read these
+ * same variables, so the overlay can never drift from real content.
+ * Engineering methodology: Müller-Brockmann Grid Systems skill — grid
+ * structure/QA only, not its visual art direction (see Design Docs).
+ *
+ * --grid-baseline is NOT a Figma value — Figma defines no baseline/row grid.
+ * 8px is adopted as a general-purpose layout spacing/QA unit (most Nettle
+ * heading line-heights land on or near multiples of it); approved Figma
+ * typography line-heights are kept exactly as specified and are NOT
+ * retrofitted to this baseline (see Design Docs).
+ * ------------------------------------------------------------------------- */
+:root {
+  --grid-columns: 12;
+  --grid-gutter: 16px;
+  --grid-margin: 32px;
+  --grid-max-width: 1376px;
+  --grid-baseline: 8px;
+}
+
+/* A band spans all grid columns and re-exposes them via subgrid, so any
+   element inside it places by column LINE (grid-column / col-start / col-end)
+   instead of an eyeballed width or offset. */
+.grid-band {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+  column-gap: var(--grid-gutter);
+  align-items: start;
+}
+@supports not (grid-template-columns: subgrid) {
+  .grid-band {
+    grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Internal docs-tool theme
+ * Semantic tokens used ONLY by the design review pages (src/app/design-system).
+ * Not part of the approved Nettle brand system — Figma defines primitives only
+ * (see the primitives block above). Every value below aliases an approved
+ * Figma primitive; none are invented. This layer exists so the internal docs
+ * tool can reuse the Tally UI Design System docs layout (tally-design-docs.
+ * vercel.app) class-for-class, with only its colors and font family swapped.
+ * ------------------------------------------------------------------------- */
+@theme {
+  --font-sans: var(--font-suisse-intl), Arial, Helvetica, sans-serif;
+  --font-crimson: var(--font-crimson-pro), Georgia, serif;
+  --font-mono: "SFMono-Regular", "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  --color-background-primary: var(--color-white);
+  --color-background-secondary: var(--color-warm-gray-200);
+  --color-background-subtle: var(--color-warm-gray-100);
+  --color-background-accent: var(--color-brand-500);
+  --color-text-primary: var(--color-warm-gray-950);
+  --color-text-secondary: var(--color-warm-gray-800);
+  --color-text-tertiary: var(--color-warm-gray-700);
+  /* rgba(42, 40, 38) = --color-warm-gray-950, at Tally's original opacities */
+  --color-border-default: rgba(42, 40, 38, 0.1);
+  --color-border-subtle: rgba(42, 40, 38, 0.05);
+  --color-border-strong: rgba(42, 40, 38, 0.2);
+  --color-border-focus: var(--color-brand-500);
+  --color-border-contrast: var(--color-warm-gray-950);
+
+  --radius-navigation: 6px;
+  --radius-card: 8px;
+
+  /* Generic elevation, not a brand color — kept as in the reference */
+  --shadow-card:
+    0 0.5px 2px 0 rgb(0 0 0 / 4%),
+    0 0.5px 2px 0 rgb(0 0 0 / 4%),
+    inset 0 0.5px 4px 0 rgb(255 255 255 / 25%),
+    inset 0 -0.5px 1px 0 rgb(0 0 0 / 12%);
+}

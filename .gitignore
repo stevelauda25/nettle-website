@@ -40,3 +40,17 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# AI agent instructions and local tooling (kept locally, not pushed)
+AGENTS.md
+CLAUDE.md
+GEMINI.md
+.claude/
+.cursor/
+.cursorrules
+.codex/
+.gemini/
+
+# editor settings
+.vscode/
+.idea/
