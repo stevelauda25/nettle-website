@@ -58,6 +58,18 @@ Internal review pages (development only, not indexed):
 | `/homepage` | Homepage preview with a grid overlay toggle |
 | `/?grid=true` | Homepage with the column overlay enabled |
 
+## Review Mode (internal)
+
+Figma-style area comments for reviewing the site on staging (https://nettle-website.vercel.app/?review=true). Reviewers pick **Nettle Team** or **Blissful Team** (no login), drag over an area, comment, reply, resolve and reopen. Comments are stored in Postgres (Neon) and shared across devices.
+
+| Variable | Purpose |
+|---|---|
+| `NEXT_PUBLIC_REVIEW_MODE` | `true` enables the tools and `/api/review/*` (build-time; redeploy after changing). Otherwise nothing renders and no review code ships. |
+| `DATABASE_URL` | Postgres connection string (added by the Vercel Neon integration). Server-only, never commit it. |
+| `REVIEW_ENVIRONMENT` | Optional scope label; defaults to `staging` on Vercel, `development` locally. |
+
+Setup on Vercel: add the Neon Postgres integration to the project, set `NEXT_PUBLIC_REVIEW_MODE=true`, redeploy. Tables are created automatically on first use. Locally: copy `.env.example` to `.env.local`, fill both variables and run `pnpm dev`. Code lives in `src/review/` and `src/app/api/review/`.
+
 ## Status
 
 - Project foundation, design foundation and grid system are in place.

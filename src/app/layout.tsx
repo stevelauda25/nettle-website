@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Crimson_Pro, La_Belle_Aurore } from "next/font/google";
 import localFont from "next/font/local";
+import { ReviewMode } from "@/review/components/review-mode";
 import "./globals.css";
 
 // Figma: Heading/* text styles
@@ -37,7 +38,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${crimsonPro.variable} ${laBelleAurore.variable} ${suisseIntl.variable}`}>
-      <body>{children}</body>
+      <body>
+        {children}
+        {/* Internal staging review tools; renders nothing unless NEXT_PUBLIC_REVIEW_MODE=true. */}
+        <ReviewMode />
+      </body>
     </html>
   );
 }
