@@ -3,6 +3,24 @@ import { FoundationCard } from "./_components/foundation-card";
 
 const foundations = [
   {
+    title: "Border radius",
+    description: "Corner hierarchy for controls, cards and imagery.",
+    href: "/design-system/radius",
+    icon: "/assets/icons/foundations/grid.svg",
+  },
+  {
+    title: "Logo",
+    description: "Colour treatments, master assets and brand naming rules.",
+    href: "/design-system/logo",
+    icon: "/assets/icons/foundations/typography.svg",
+  },
+  {
+    title: "Imagery",
+    description: "Pre-1900 industrial direction, treatment and provenance.",
+    href: "/design-system/imagery",
+    icon: "/assets/icons/foundations/color.svg",
+  },
+  {
     title: "Spacing",
     description: "Explore responsive spacing roles and usage rules.",
     href: "/design-system/spacing",

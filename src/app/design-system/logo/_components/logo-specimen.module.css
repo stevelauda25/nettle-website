@@ -1,0 +1,27 @@
+.surface {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 12rem;
+  padding: 2rem;
+  background-color: var(--specimen-surface);
+}
+
+.light {
+  --specimen-surface: var(--color-warm-gray-100);
+  --specimen-check: var(--color-white);
+}
+
+.dark {
+  --specimen-surface: var(--color-black);
+  --specimen-check: var(--color-warm-gray-950);
+}
+
+/* The checkerboard belongs to the example surface, never to the SVG artwork. */
+.transparent {
+  background-image: conic-gradient(
+    var(--specimen-check) 25%, transparent 0 50%,
+    var(--specimen-check) 0 75%, transparent 0
+  );
+  background-size: 1.5rem 1.5rem;
+}

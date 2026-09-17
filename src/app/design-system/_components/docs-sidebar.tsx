@@ -8,6 +8,9 @@ const foundationItems = [
   { label: "Typography", href: "/design-system/typography" },
   { label: "Spacing", href: "/design-system/spacing" },
   { label: "Grid", href: "/design-system/grid" },
+  { label: "Border radius", href: "/design-system/radius" },
+  { label: "Logo", href: "/design-system/logo" },
+  { label: "Imagery", href: "/design-system/imagery" },
 ] as const;
 
 let foundationsExpandedState = true;
