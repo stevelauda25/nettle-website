@@ -1,0 +1,33 @@
+/* Opt-in only: let typography and spacing specimens use the actual viewport.
+   Default docs routes and every marketing layout remain unchanged. */
+@media (width < 1440px) {
+  .responsive {
+    min-width: 0;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .responsive > header,
+  .responsive > aside,
+  .responsive [data-slot="docs-detail-layout"] > aside {
+    display: none;
+  }
+
+  .responsive > main {
+    grid-column: 1;
+  }
+
+  .responsive [data-slot="docs-detail-layout"] {
+    width: 100%;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .responsive [data-slot="docs-detail-content"] {
+    min-width: 0;
+    padding: 32px 24px;
+  }
+
+  .responsive [data-slot="docs-content"] {
+    width: 100%;
+    min-width: 0;
+  }
+}

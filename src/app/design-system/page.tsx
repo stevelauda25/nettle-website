@@ -3,6 +3,12 @@ import { FoundationCard } from "./_components/foundation-card";
 
 const foundations = [
   {
+    title: "Spacing",
+    description: "Explore responsive spacing roles and usage rules.",
+    href: "/design-system/spacing",
+    icon: "/assets/icons/foundations/grid.svg",
+  },
+  {
     title: "Color",
     description: "Explore the color styles and usage guidance.",
     href: "/design-system/color",

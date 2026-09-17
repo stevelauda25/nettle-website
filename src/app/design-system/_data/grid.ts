@@ -1,4 +1,4 @@
-// Grid foundation values as defined in Figma.
+// Figma desktop grid with user-requested mobile gutters.
 // Must stay in sync with the :root grid tokens in src/app/globals.css.
 
 export const gridSkill = {
@@ -26,8 +26,8 @@ export const desktopGrid: GridConfig = {
 };
 
 export const undefinedGrids: { label: string; note: string }[] = [
-  { label: "Tablet", note: "No layout grid found on any tablet-width frame in Figma." },
-  { label: "Mobile", note: "No layout grid found on any mobile-width frame in Figma." },
+  { label: "Tablet", note: "No tablet layout grid in Figma. Page margins interpolate continuously through the shared 390–1440px range, reaching 32px at desktop; there is no margin jump at md." },
+  { label: "Mobile", note: "No mobile layout grid in Figma. The approved Balanced spacing system starts page margins at 16px at 390px and below. --grid-margin aliases --space-page-inline; content, carousel endpoints and the QA overlay all inherit it. Columns and gutters remain unchanged." },
 ];
 
 export const baselineNote =
@@ -38,7 +38,7 @@ export const baselineMismatches: { style: string; lineHeightPx: string; multiple
   { style: "Heading/H2 — 56px / 100%", lineHeightPx: "56px", multipleOf8: true },
   { style: "Heading/H3 — 52px / 100%", lineHeightPx: "52px", multipleOf8: false },
   { style: "Heading/H4 — 48px / 100%", lineHeightPx: "48px", multipleOf8: true },
-  { style: "Heading/H5 — 32px / 100%", lineHeightPx: "32px", multipleOf8: true },
+  { style: "Heading/H5 — 32px / 110%", lineHeightPx: "35.2px", multipleOf8: false },
   { style: "Heading/H6 — 24px / 100%", lineHeightPx: "24px", multipleOf8: true },
   { style: "Body/Large — 18px / 110%", lineHeightPx: "19.8px", multipleOf8: false },
   { style: "Body/Medium — 16px / 140%", lineHeightPx: "22.4px", multipleOf8: false },
@@ -61,6 +61,16 @@ export const docSections: DocSection[] = [
     title: "2. Purpose",
     body: [
       "The grid provides the structural foundation used when translating Figma layouts into frontend implementation: a single source of truth for columns, gutters and margins, shared by real content and its verification overlay.",
+    ],
+  },
+  {
+    title: "3. Responsive spacing",
+    body: [
+      "Responsive Spacing System lives in globals.css and /design-system/spacing. Semantic roles use the same rem-based 390–1440px interpolation as typography, with bounded mobile minima and existing desktop maxima. Mobile values are the user-approved Balanced scale, not Figma mobile specifications.",
+      "Standard page edges scale from 16px to 32px through --grid-margin. Do not bypass Container or duplicate the margin in individual sections. Grid gutters, columns and maximum content width remain fixed.",
+      "Count both sides of adjoining sections: Features bottom plus One Workspace top totals 64px on mobile and 180px at desktop. Do not add another section margin. The spacing preview documents every section mapping and preserved optical exception.",
+      "Hero remains content-driven, with its dashboard visible and no viewport-height spacer. Video uses fluid media padding in normal flow on mobile; its existing md+ 200svh pinned stage and zero-padding override are unchanged. Reduced-motion and unsupported browsers use the static poster.",
+      "Carousel controls retain current responsive placement and hit targets; heading/control and heading/card gaps now interpolate rather than stepping at md. Layout breakpoints and illustration-coordinate spacing are not changed.",
     ],
   },
   {

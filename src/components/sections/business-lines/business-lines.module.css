@@ -1,0 +1,35 @@
+/* Card spans derive from the same content width and gutter as Grid/overlay. */
+.layout {
+  --business-content-width: min(calc(100vw - 2 * var(--grid-margin)), var(--grid-max-width));
+  --business-card-width: var(--carousel-single-card-width);
+}
+
+.viewport {
+  scroll-snap-type: x mandatory;
+}
+
+.card {
+  width: var(--business-card-width);
+  flex: none;
+  scroll-snap-align: start;
+}
+
+.card::after {
+  /* Keep all four outline edges inside the card, above the artwork/texture,
+     so neither the scroll viewport nor the card's own crop can hide them. */
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-black) 10%, transparent);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+@media (min-width: 48rem) {
+  .layout { --business-card-width: calc((var(--business-content-width) - var(--grid-gutter)) / 2); }
+}
+
+@media (min-width: 80rem) {
+  .layout { --business-card-width: calc((var(--business-content-width) - 2 * var(--grid-gutter)) / 3); }
+}

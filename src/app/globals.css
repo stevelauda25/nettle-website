@@ -98,14 +98,38 @@
 
 /* ---------------------------------------------------------------------------
  * Typography
- * Source: Figma local text styles. Desktop values only — Figma defines no
- * responsive variants. Line height: Figma % → unitless; tracking: Figma % → em.
+ * Source: Figma desktop text styles (maxima); user-approved Balanced minima.
+ * One rem-based interpolation range: 390–1440px at a 16px root.
+ * Line height: Figma % → unitless; tracking: Figma % → em.
  * ------------------------------------------------------------------------- */
+
+/* Shared fluid step is a length: 0rem at 24.375rem, 1rem at 90rem.
+   Each preferred value is min-rem + delta-rem-number × step (rem + vw).
+   Rem bounds/range respect user font preferences; do not set a root font size.
+   CSS is authoritative; foundation.ts mirrors values for docs and static tests. */
+:root {
+  --type-viewport-min: 24.375rem;
+  --type-viewport-span: 65.625;
+  --type-fluid-step: calc((100vw - var(--type-viewport-min)) / var(--type-viewport-span));
+  --type-size-heading-h1: clamp(2.5rem, calc(2.5rem + 1.5 * var(--type-fluid-step)), 4rem);
+  /* User-requested mobile refinement: large headings −4px; smaller headings
+     and body copy −2px. Desktop maxima and Hero H1 remain unchanged. */
+  --type-size-heading-h2: clamp(2.125rem, calc(2.125rem + 1.375 * var(--type-fluid-step)), 3.5rem);
+  --type-size-heading-h3: clamp(2rem, calc(2rem + 1.25 * var(--type-fluid-step)), 3.25rem);
+  --type-size-heading-h4: clamp(1.875rem, calc(1.875rem + 1.125 * var(--type-fluid-step)), 3rem);
+  /* Mobile Figma H5 was 24px; user refinement takes precedence at 22px. */
+  --type-size-heading-h5: clamp(1.375rem, calc(1.375rem + 0.625 * var(--type-fluid-step)), 2rem);
+  --type-size-heading-h6: clamp(1.25rem, calc(1.25rem + 0.25 * var(--type-fluid-step)), 1.5rem);
+  --type-size-heading-card: clamp(1.75rem, calc(1.75rem + 0.25 * var(--type-fluid-step)), 2rem);
+  --type-size-body-large: clamp(0.9375rem, calc(0.9375rem + 0.1875 * var(--type-fluid-step)), 1.125rem);
+  --type-size-body-medium: clamp(0.875rem, calc(0.875rem + 0.125 * var(--type-fluid-step)), 1rem);
+  --type-size-display-statement: clamp(2rem, calc(2rem + 1.375 * var(--type-fluid-step)), 3.375rem);
+}
 
 /* Heading/H1 */
 @utility text-heading-h1 {
   font-family: var(--font-heading);
-  font-size: 64px;
+  font-size: var(--type-size-heading-h1);
   font-weight: 300;
   line-height: 1;
   letter-spacing: -0.01em;
@@ -114,7 +138,7 @@
 /* Heading/H2 */
 @utility text-heading-h2 {
   font-family: var(--font-heading);
-  font-size: 56px;
+  font-size: var(--type-size-heading-h2);
   font-weight: 300;
   line-height: 1;
   letter-spacing: -0.02em;
@@ -123,7 +147,7 @@
 /* Heading/H3 */
 @utility text-heading-h3 {
   font-family: var(--font-heading);
-  font-size: 52px;
+  font-size: var(--type-size-heading-h3);
   font-weight: 300;
   line-height: 1;
   letter-spacing: -0.01em;
@@ -132,25 +156,35 @@
 /* Heading/H4 */
 @utility text-heading-h4 {
   font-family: var(--font-heading);
-  font-size: 48px;
+  font-size: var(--type-size-heading-h4);
   font-weight: 300;
   line-height: 1;
   letter-spacing: -0.01em;
 }
 
-/* Heading/H5 */
+/* Heading/H5 — 110% approved in Testimonial 415:4223 (17 Sep 2026). */
 @utility text-heading-h5 {
   font-family: var(--font-heading);
-  font-size: 32px;
+  font-size: var(--type-size-heading-h5);
   font-weight: 400;
-  line-height: 1;
+  line-height: 1.1;
   letter-spacing: 0;
 }
 
 /* Heading/H6 */
 @utility text-heading-h6 {
   font-family: var(--font-heading);
-  font-size: 24px;
+  font-size: var(--type-size-heading-h6);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+/* Compact card heading: mobile CTA 440:4683 explicitly uses the original
+   32px Regular / 100% H5 treatment, distinct from Testimonial H5 / 110%. */
+@utility text-heading-card {
+  font-family: var(--font-heading);
+  font-size: var(--type-size-heading-card);
   font-weight: 400;
   line-height: 1;
   letter-spacing: 0;
@@ -159,7 +193,7 @@
 /* Body/Large/Regular */
 @utility text-body-large-regular {
   font-family: var(--font-body);
-  font-size: 18px;
+  font-size: var(--type-size-body-large);
   font-weight: 400;
   line-height: 1.1;
   letter-spacing: 0;
@@ -168,7 +202,7 @@
 /* Body/Large/Medium */
 @utility text-body-large-medium {
   font-family: var(--font-body);
-  font-size: 18px;
+  font-size: var(--type-size-body-large);
   font-weight: 500;
   line-height: 1.1;
   letter-spacing: 0;
@@ -177,7 +211,7 @@
 /* Body/Medium/Regular */
 @utility text-body-medium-regular {
   font-family: var(--font-body);
-  font-size: 16px;
+  font-size: var(--type-size-body-medium);
   font-weight: 400;
   line-height: 1.4;
   letter-spacing: 0;
@@ -186,7 +220,7 @@
 /* Body/Medium/Medium */
 @utility text-body-medium-medium {
   font-family: var(--font-body);
-  font-size: 16px;
+  font-size: var(--type-size-body-medium);
   font-weight: 500;
   line-height: 1.4;
   letter-spacing: 0;
@@ -210,6 +244,15 @@
   letter-spacing: 0.01em;
 }
 
+/* Approved detached display treatment: Figma 409:3584, within 440:3509. */
+@utility text-display-statement {
+  font-family: var(--font-heading);
+  font-size: var(--type-size-display-statement);
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
 /* Handwritten accent notes — no Figma text style exists; values taken from the
    detached La Belle Aurore text in the Hero frame (16px / 120% / -2%). */
 @utility text-handwritten {
@@ -218,6 +261,41 @@
   font-weight: 400;
   line-height: 1.2;
   letter-spacing: -0.02em;
+}
+
+/* ---------------------------------------------------------------------------
+ * Responsive spacing — Balanced
+ * Approved mobile minima / existing desktop maxima; default-root 390–1440px.
+ * Reuse the typography interpolation without changing its tokens or values.
+ * CSS is authoritative; design-system/_data/spacing.ts mirrors this scale.
+ * Tailwind's base --spacing unit, grid gutter and illustration spacing stay fixed.
+ * ------------------------------------------------------------------------- */
+:root {
+  --space-fluid-step: var(--type-fluid-step);
+  --space-micro-gap: 0.25rem;
+  --space-tight-gap: 0.5rem;
+  --space-related-gap: 0.75rem;
+  --space-heading-gap: clamp(0.75rem, calc(0.75rem + 0.25 * var(--space-fluid-step)), 1rem);
+  --space-component-gap: clamp(1rem, calc(1rem + 0.5 * var(--space-fluid-step)), 1.5rem);
+  --space-content-gap: clamp(1.5rem, calc(1.5rem + 0.5 * var(--space-fluid-step)), 2rem);
+  --space-content-block-gap: clamp(1.5rem, calc(1.5rem + 1.5 * var(--space-fluid-step)), 3rem);
+  --space-major-content-gap: clamp(2rem, calc(2rem + 2 * var(--space-fluid-step)), 4rem);
+  --space-visual-gap: clamp(2.5rem, calc(2.5rem + 2.5 * var(--space-fluid-step)), 5rem);
+  --space-page-inline: clamp(1rem, calc(1rem + 1 * var(--space-fluid-step)), 2rem);
+  --space-card-padding: clamp(1.25rem, calc(1.25rem + 0.25 * var(--space-fluid-step)), 1.5rem);
+  --space-card-padding-spacious: var(--space-content-gap);
+  /* Key Metrics: user-requested 46px mobile top inset; desktop stays 56px. */
+  --space-card-leading: clamp(2.875rem, calc(2.875rem + 0.625 * var(--space-fluid-step)), 3.5rem);
+  --space-section-content-gap: clamp(1.5rem, calc(1.5rem + 1.375 * var(--space-fluid-step)), 2.875rem);
+  --space-section-standard: clamp(3rem, calc(3rem + 4.5 * var(--space-fluid-step)), 7.5rem);
+  --space-section-generous: clamp(4rem, calc(4rem + 6 * var(--space-fluid-step)), 10rem);
+  --space-section-prominent: clamp(4rem, calc(4rem + 7.25 * var(--space-fluid-step)), 11.25rem);
+  --space-section-major: clamp(4rem, calc(4rem + 8.5 * var(--space-fluid-step)), 12.5rem);
+  --space-section-adjoining: clamp(2rem, calc(2rem + 3.625 * var(--space-fluid-step)), 5.625rem);
+  --space-section-media: clamp(2rem, calc(2rem + 5.5 * var(--space-fluid-step)), 7.5rem);
+  --space-section-opening-start: clamp(3rem, calc(3rem + 3.125 * var(--space-fluid-step)), 6.125rem);
+  --space-section-opening-end: clamp(2rem, calc(2rem + 1.75 * var(--space-fluid-step)), 3.75rem);
+  --space-section-flush: var(--space-page-inline);
 }
 
 /* ---------------------------------------------------------------------------
@@ -232,7 +310,7 @@
 
   @keyframes scroll-scale-in {
     from {
-      scale: 0.75;
+      scale: var(--scroll-scale-from, 0.75);
     }
     to {
       scale: 1;
@@ -262,7 +340,7 @@
 :root {
   --grid-columns: 12;
   --grid-gutter: 16px;
-  --grid-margin: 32px;
+  --grid-margin: var(--space-page-inline);
   --grid-max-width: 1376px;
   --grid-baseline: 8px;
 }

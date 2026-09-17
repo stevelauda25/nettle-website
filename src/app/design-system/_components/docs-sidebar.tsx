@@ -6,6 +6,7 @@ import { NavigationItem } from "./navigation-item";
 const foundationItems = [
   { label: "Color", href: "/design-system/color" },
   { label: "Typography", href: "/design-system/typography" },
+  { label: "Spacing", href: "/design-system/spacing" },
   { label: "Grid", href: "/design-system/grid" },
 ] as const;
 

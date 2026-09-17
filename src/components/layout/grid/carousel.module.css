@@ -1,0 +1,41 @@
+.viewport {
+  /* Full-width scrollport; the grid alignment belongs to the track padding,
+     not a clipping boundary at the heading's left edge. */
+  --carousel-content-width: min(calc(100% - 2 * var(--grid-margin)), var(--grid-max-width));
+  --carousel-edge: max(var(--grid-margin), calc((100% - var(--grid-max-width)) / 2));
+  --carousel-inset: var(--carousel-edge);
+  /* One card + fixed grid gutter + a two-gutter preview of the next card.
+     Viewport units avoid percentage resolution against the max-content track. */
+  --carousel-card-peek: calc(2 * var(--grid-gutter));
+  --carousel-single-card-width: calc(100vw - var(--grid-margin) - var(--grid-gutter) - var(--carousel-card-peek));
+  width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  scroll-padding-inline: var(--carousel-inset);
+  scroll-snap-type: x mandatory;
+}
+
+.viewport::-webkit-scrollbar {
+  display: none;
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  gap: var(--grid-gutter);
+  /* Match both header edges, including the final card's scroll endpoint. */
+  padding-inline: var(--carousel-inset);
+}
+
+.track > li {
+  scroll-snap-align: start;
+}
+
+@media (min-width: 64rem) {
+  .viewport {
+    /* Column two: one column pitch beyond the Container's content edge. */
+    --carousel-inset: calc(var(--carousel-edge) + (var(--carousel-content-width) + var(--grid-gutter)) / var(--grid-columns));
+  }
+}

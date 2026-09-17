@@ -18,10 +18,10 @@ const metrics: Metric[] = [
 // split that 10-column span into thirds with the grid gutter, as drawn in Figma.
 export function KeyMetrics() {
   return (
-    <section aria-labelledby="key-metrics-heading" className="bg-white py-30">
+    <section aria-labelledby="key-metrics-heading" className="bg-white pt-(--space-section-media) pb-(--space-section-major)">
       <Container>
         <Grid>
-          <div className="col-span-12 flex flex-col gap-16 lg:col-start-2 lg:col-end-12">
+          <div className="col-span-12 flex flex-col gap-(--space-major-content-gap) lg:col-start-2 lg:col-end-12">
             <h2 id="key-metrics-heading" className="text-heading-h3 text-black">
               Faster risk decisions.
               <br />
@@ -31,7 +31,7 @@ export function KeyMetrics() {
             <ul className="grid grid-cols-1 gap-(--grid-gutter) lg:grid-cols-3">
               {metrics.map((metric) => (
                 <li key={metric.value} data-slot="metric-card" className="border-l border-warm-gray-600">
-                  <div className="flex flex-col gap-2 px-6 pt-14 pb-6">
+                  <div className="flex flex-col gap-(--space-tight-gap) px-(--space-card-padding) pt-(--space-card-leading) pb-(--space-card-padding)">
                     <p data-slot="metric-value" className="text-heading-h4 whitespace-nowrap text-black">
                       {metric.value}
                     </p>

@@ -17,9 +17,9 @@ const navItems: NavItem[] = [
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50">
-      <div className="flex flex-wrap items-center justify-center gap-x-2 bg-warm-gray-950 px-2.5 py-1.5 text-center text-body-small-regular text-white">
-        <p>Nettle raises $4.8M Seed to build the AI workspace for loss control.</p>
-        <Link href="#" className="underline">
+      <div className="flex items-center justify-center gap-x-2 bg-warm-gray-950 px-[var(--grid-margin)] text-center text-body-small-regular text-white md:px-2.5 md:py-1.5">
+        <p className="min-w-0 truncate">Nettle raises $4.8M Seed to build the AI workspace for loss control.</p>
+        <Link href="#" className="flex min-h-11 shrink-0 items-center whitespace-nowrap underline md:min-h-0">
           Read Announcement →
         </Link>
       </div>

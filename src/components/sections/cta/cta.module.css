@@ -1,0 +1,26 @@
+@reference "../../../app/globals.css";
+
+/* Figma 440:4680: 370 × 527 panel, centered 312px content measure.
+   The mobile breakpoint is inferred; tablet/desktop retain their layout. */
+@media (width < 48rem) {
+  .content {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: min(312px, calc(100% - 2 * var(--space-card-padding)));
+    gap: 32px;
+  }
+
+  .heading {
+    /* Approved compact card treatment, not Testimonial's 110%-leading H5. */
+    @apply text-heading-card;
+    text-wrap: balance;
+    overflow-wrap: break-word;
+  }
+
+  .texture {
+    /* Figma clips the desktop-size texture rather than fitting it to the card. */
+    inset: 0 auto auto 0;
+    width: 1376px;
+    height: 527px;
+  }
+}

@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { DocsBrand } from "./docs-brand";
 import { DocsHeader } from "./docs-header";
 import { DocsSidebar } from "./docs-sidebar";
+import styles from "./docs-shell.module.css";
 
 type DocsShellProps = {
   children: ReactNode;
@@ -13,6 +14,7 @@ type DocsShellProps = {
   };
   detailRail?: ReactNode;
   smoothAnchorScroll?: boolean;
+  responsive?: boolean;
 };
 
 export function DocsShell({
@@ -22,11 +24,12 @@ export function DocsShell({
   breadcrumb,
   detailRail,
   smoothAnchorScroll = false,
+  responsive = false,
 }: DocsShellProps) {
   const isDetailPage = Boolean(detailRail);
 
   return (
-    <div className="grid h-dvh min-h-0 min-w-[1440px] grid-cols-[300px_minmax(1140px,1fr)] grid-rows-[64px_minmax(0,1fr)] overflow-hidden bg-background-primary">
+    <div className={`${responsive ? styles.responsive : ""} grid h-dvh min-h-0 min-w-[1440px] grid-cols-[300px_minmax(1140px,1fr)] grid-rows-[64px_minmax(0,1fr)] overflow-hidden bg-background-primary`}>
       <DocsBrand />
       <DocsHeader title={pageTitle} breadcrumb={breadcrumb} />
       <DocsSidebar activePath={activePath} />
@@ -36,9 +39,9 @@ export function DocsShell({
         } ${isDetailPage ? "" : "py-[58px] [scrollbar-gutter:stable_both-edges]"}`}
       >
         {isDetailPage ? (
-          <div className="grid h-max min-h-full w-[1140px] grid-cols-[840px_300px]">
-            <div className="h-max min-h-full self-start px-32 py-[58px]">
-              <div className="flex w-[584px] flex-col gap-12">{children}</div>
+          <div data-slot="docs-detail-layout" className="grid h-max min-h-full w-[1140px] grid-cols-[840px_300px]">
+            <div data-slot="docs-detail-content" className="h-max min-h-full self-start px-32 py-[58px]">
+              <div data-slot="docs-content" className="flex w-[584px] flex-col gap-12">{children}</div>
             </div>
             <aside className="sticky top-0 h-[calc(100dvh-64px)] min-h-0 self-start overflow-hidden">
               {detailRail}

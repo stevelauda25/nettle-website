@@ -1,0 +1,77 @@
+.viewport {
+  --testimonial-content-width: min(calc(100vw - 2 * var(--grid-margin)), var(--grid-max-width));
+  --testimonial-card-width: var(--carousel-single-card-width);
+  scroll-snap-type: x mandatory;
+}
+
+.card {
+  width: var(--testimonial-card-width);
+  flex: none;
+  scroll-snap-align: start;
+}
+
+.quote {
+  /* Approved text measure, not an independent page container. */
+  max-width: 666px;
+}
+
+.emphasis {
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  background-size: 100% 5.555px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+/* Approved mobile card 440:4548. Keep text in normal flow so enlarged text
+   can grow the 406px card rather than clipping the quotation. */
+@media (width < 48rem) {
+  .card {
+    max-width: 340px;
+  }
+
+  .figure {
+    min-height: 406px;
+    padding: 20px;
+    gap: 0;
+  }
+
+  .artworkSpace {
+    /* Mobile artwork clearance, independent of the desktop canvas ratio. */
+    aspect-ratio: auto;
+    height: 180px;
+  }
+
+  .content {
+    padding-top: var(--space-content-gap);
+  }
+
+  .quote {
+    overflow-wrap: break-word;
+  }
+
+  .allianz [data-slot="company-logo"] {
+    width: 80px;
+    height: 20.719px;
+  }
+
+  .brotherhood [data-slot="company-logo"] {
+    width: 104px;
+    height: 26px;
+  }
+
+  .emphasis {
+    background-size: 100% 4.62px;
+  }
+
+  .brotherhood .emphasis {
+    background-size: 0 0;
+  }
+}
+
+@media (min-width: 64rem) {
+  .viewport {
+    /* Ten columns, sharing the header and overlay's exact column pitch. */
+    --testimonial-card-width: calc(var(--testimonial-content-width) - 2 * (var(--testimonial-content-width) + var(--grid-gutter)) / var(--grid-columns));
+  }
+}
