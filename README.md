@@ -58,9 +58,11 @@ Internal review pages (development only, not indexed):
 | `/homepage` | Homepage preview with a grid overlay toggle |
 | `/?grid=true` | Homepage with the column overlay enabled |
 
+The **Grid** toggle and overlays run locally and on builds with `NEXT_PUBLIC_REVIEW_MODE=true` (staging and Vercel previews); they are stripped when that flag is off.
+
 ## Review Mode (internal)
 
-Figma-style area comments for reviewing the site on staging (https://nettle-website.vercel.app/?review=true). Reviewers pick **Nettle Team** or **Blissful Team** (no login), drag over an area, comment, reply, resolve and reopen. Comments are stored in Postgres (Neon) and shared across devices.
+Figma-style area comments for reviewing the site on staging (https://nettle-website.vercel.app/?review=true). Reviewers pick **Nettle Team** or **Blissful Team** (no login), open the white **Comment** button (bottom-right), drag over an area, comment, reply, resolve, reopen or delete. Comments are stored in Postgres (Neon) and shared across devices.
 
 | Variable | Purpose |
 |---|---|

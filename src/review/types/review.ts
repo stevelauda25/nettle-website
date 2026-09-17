@@ -34,6 +34,8 @@ export type ReviewReply = {
 
 export type ReviewComment = {
   id: string;
+  /** Marker number: stored at creation, unique per route, never reused while later comments exist. */
+  number: number;
   pathname: string;
   team: ReviewTeam;
   message: string;

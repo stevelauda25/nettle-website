@@ -8,6 +8,7 @@ create table if not exists review_comments (
   project text not null,
   environment text not null,
   pathname text not null,
+  number integer,
   team text not null check (team in ('nettle', 'blissful')),
   message text not null,
   status text not null default 'open' check (status in ('open', 'resolved')),
@@ -25,6 +26,18 @@ create table if not exists review_comments (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+-- Added after the first release: stored marker numbers, so deleting a comment
+-- does not renumber the others. Backfills rows created before the column existed.
+alter table review_comments add column if not exists number integer;
+
+update review_comments c
+set number = numbered.position
+from (
+  select id, row_number() over (partition by project, environment, pathname order by created_at, id) as position
+  from review_comments
+) numbered
+where c.id = numbered.id and c.number is null;
 
 create index if not exists review_comments_scope_idx
   on review_comments (project, environment, pathname, created_at);

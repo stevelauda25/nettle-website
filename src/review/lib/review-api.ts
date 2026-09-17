@@ -52,3 +52,7 @@ export async function patchCommentStatus(commentId: string, status: ReviewStatus
   });
   return comment;
 }
+
+export async function deleteReviewComment(commentId: string) {
+  await request<{ deleted: true }>(`/api/review/comments/${commentId}`, { method: "DELETE" });
+}

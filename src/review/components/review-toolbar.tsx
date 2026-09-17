@@ -39,7 +39,7 @@ function ListIcon() {
   );
 }
 
-/** Floating review control: collapsed "Review" pill, or Comment / Team / Comments. */
+/** Floating review control, bottom-right: white "Comment" pill, expanding into a small stacked card. */
 export function ReviewToolbar({
   expanded,
   onExpandedChange,
@@ -56,48 +56,72 @@ export function ReviewToolbar({
 
   if (!expanded) {
     return (
-      <div {...uiAttribute} className={`${styles.ui} ${styles.toolbar}`}>
-        <button type="button" onClick={() => onExpandedChange(true)} className={styles.toolbarButton}>
+      <div {...uiAttribute} className={`${styles.ui} ${styles.toolbar} ${styles.toolbarCollapsed}`}>
+        <button
+          type="button"
+          onClick={() => onExpandedChange(true)}
+          aria-label="Open review comments"
+          className={styles.toggleButton}
+        >
           <CommentIcon />
-          Review
+          Comment
         </button>
       </div>
     );
   }
 
   return (
-    <div {...uiAttribute} role="toolbar" aria-label="Review tools" className={`${styles.ui} ${styles.toolbar}`}>
+    <div
+      {...uiAttribute}
+      role="group"
+      aria-label="Review tools"
+      className={`${styles.ui} ${styles.toolbar} ${styles.toolbarCard} ${sidebarOpen ? styles.toolbarBesideSidebar : ""}`}
+    >
+      <div className={styles.toolbarHeader}>
+        <p className={styles.toolbarTitle}>Review</p>
+        <button
+          type="button"
+          onClick={() => onExpandedChange(false)}
+          aria-label="Close review tools"
+          className={styles.iconButton}
+        >
+          ×
+        </button>
+      </div>
+
       <button
         type="button"
         aria-pressed={commentMode}
         onClick={() => onCommentModeChange(!commentMode)}
         title="Comment mode (C)"
-        aria-label="Comment mode"
-        className={styles.toolbarButton}
+        className={styles.toolbarRow}
       >
         <CommentIcon />
-        <span className={styles.toolbarLabel}>Comment</span>
+        <span className={styles.toolbarRowLabel}>Comment</span>
+        <kbd className={styles.kbd} aria-hidden="true">
+          C
+        </kbd>
       </button>
-      <TeamSelect value={team} onChange={onTeamChange} variant="dark" />
+
       <button
         type="button"
         aria-pressed={sidebarOpen}
         onClick={() => onSidebarOpenChange(!sidebarOpen)}
-        aria-label="Comments"
-        className={styles.toolbarButton}
+        className={styles.toolbarRow}
       >
         <ListIcon />
-        <span className={styles.toolbarLabel}>Comments</span>
-        <span className={hasError ? styles.countError : styles.count}>{hasError ? "!" : (openCount ?? "…")}</span>
+        <span className={styles.toolbarRowLabel}>Comments</span>
+        <span
+          className={hasError ? styles.countError : styles.count}
+          aria-label={hasError ? "Could not load comments" : `${openCount ?? 0} open`}
+        >
+          {hasError ? "!" : (openCount ?? "…")}
+        </span>
       </button>
-      <button
-        type="button"
-        onClick={() => onExpandedChange(false)}
-        aria-label="Close review tools"
-        className={styles.toolbarIcon}
-      >
-        ×
-      </button>
+
+      <div className={styles.toolbarTeam}>
+        <TeamSelect value={team} onChange={onTeamChange} />
+      </div>
     </div>
   );
 }

@@ -10,7 +10,6 @@ type CommentSidebarProps = {
   pathname: string;
   /** null while loading. */
   comments: ReviewComment[] | null;
-  numbers: Map<string, number>;
   error: string | null;
   filter: ReviewStatus;
   onFilterChange: (filter: ReviewStatus) => void;
@@ -29,7 +28,6 @@ const FILTERS: { id: ReviewStatus; label: string }[] = [
 export function CommentSidebar({
   pathname,
   comments,
-  numbers,
   error,
   filter,
   onFilterChange,
@@ -77,7 +75,7 @@ export function CommentSidebar({
       )}
 
       {comments === null ? (
-        <p className={styles.empty}>Loading comments…</p>
+        !error && <p className={styles.empty}>Loading comments…</p>
       ) : visible.length === 0 ? (
         <p className={styles.empty}>
           {filter === "open" ? "No open comments on this page." : "No resolved comments on this page."}
@@ -96,7 +94,7 @@ export function CommentSidebar({
                 className={styles.item}
               >
                 <span className={styles.markerStatic} style={teamStyle(comment.team)}>
-                  {numbers.get(comment.id)}
+                  {comment.number}
                 </span>
                 <span className={styles.itemContent}>
                   <span className={styles.itemMeta}>
