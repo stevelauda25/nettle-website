@@ -10,7 +10,13 @@ import { CommentThread } from "@/review/components/comment-thread";
 import { ReviewToolbar } from "@/review/components/review-toolbar";
 import { SelectionOverlay } from "@/review/components/selection-overlay";
 import { createAnchor, resolveAnchor } from "@/review/lib/annotation-positioning";
-import { fetchComments, patchCommentStatus, postComment, postReply } from "@/review/lib/review-api";
+import {
+  deleteReviewComment,
+  fetchComments,
+  patchCommentStatus,
+  postComment,
+  postReply,
+} from "@/review/lib/review-api";
 import { isReviewTeam, normalizeReviewPathname } from "@/review/lib/review-config";
 import { useAnnotationPositions, type AnnotationEntry } from "@/review/lib/use-annotation-positions";
 import type {
@@ -131,11 +137,12 @@ function ReviewClient() {
     });
   }, []);
 
-  // Numbers follow creation order and never change when comments are resolved.
-  const numbers = useMemo(
-    () => new Map((comments ?? []).map((comment, index) => [comment.id, index + 1])),
-    [comments],
-  );
+  const removeComment = useCallback((commentId: string) => {
+    setStore((prev) => prev && { ...prev, comments: prev.comments.filter((item) => item.id !== commentId) });
+  }, []);
+
+  // Numbers are stored per comment; the server assigns the same "highest + 1" on save.
+  const nextNumber = Math.max(0, ...(comments ?? []).map((comment) => comment.number)) + 1;
 
   const showResolved = sidebarOpen && filter === "resolved";
   const entries = useMemo<AnnotationEntry[]>(() => {
@@ -224,7 +231,7 @@ function ReviewClient() {
                 key={comment.id}
                 rect={position}
                 team={comment.team}
-                number={numbers.get(comment.id)}
+                number={comment.number}
                 variant={comment.status}
                 detached={!position.attached}
                 hovered={hoveredId === comment.id}
@@ -245,13 +252,13 @@ function ReviewClient() {
               <AnnotationBox
                 rect={draftPosition}
                 team={team}
-                number={(comments?.length ?? 0) + 1}
+                number={nextNumber}
                 variant="draft"
                 selected
               />
               <AnnotationPopover key={DRAFT_ID} rect={draftPosition} rightInset={sidebarInset}>
                 <CommentComposer
-                  number={(comments?.length ?? 0) + 1}
+                  number={nextNumber}
                   team={team}
                   onTeamChange={setTeam}
                   onCancel={() => setDraft(null)}
@@ -274,7 +281,6 @@ function ReviewClient() {
             <AnnotationPopover key={selectedComment.id} rect={selectedPosition} rightInset={sidebarInset}>
               <CommentThread
                 comment={selectedComment}
-                number={numbers.get(selectedComment.id) ?? 0}
                 attached={selectedPosition.attached}
                 team={team}
                 onTeamChange={setTeam}
@@ -284,6 +290,12 @@ function ReviewClient() {
                 }}
                 onSetStatus={async (status) => {
                   upsertComment(await patchCommentStatus(selectedComment.id, status));
+                }}
+                onDelete={async () => {
+                  await deleteReviewComment(selectedComment.id);
+                  setSelected(null);
+                  setHoveredId(null);
+                  removeComment(selectedComment.id);
                 }}
               />
             </AnnotationPopover>
@@ -299,7 +311,6 @@ function ReviewClient() {
         <CommentSidebar
           pathname={pathname}
           comments={comments}
-          numbers={numbers}
           error={loadError}
           filter={filter}
           onFilterChange={setFilter}

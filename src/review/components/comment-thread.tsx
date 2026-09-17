@@ -9,14 +9,28 @@ import styles from "./review.module.css";
 
 type CommentThreadProps = {
   comment: ReviewComment;
-  number: number;
   attached: boolean;
   team: ReviewTeam | null;
   onTeamChange: (team: ReviewTeam) => void;
   onReply: (team: ReviewTeam, message: string) => Promise<void>;
   onSetStatus: (status: ReviewStatus) => Promise<void>;
+  onDelete: () => Promise<void>;
   onClose: () => void;
 };
+
+function TrashIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path
+        d="M3 4.5h10M6.5 4.5V3h3v1.5M4.5 4.5l.6 8.5h5.8l.6-8.5M6.8 7v3.5M9.2 7v3.5"
+        stroke="currentColor"
+        strokeWidth="1.3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
 
 function ThreadMessage({ team, message, createdAt }: { team: ReviewTeam; message: string; createdAt: string }) {
   return (
@@ -33,52 +47,97 @@ function ThreadMessage({ team, message, createdAt }: { team: ReviewTeam; message
 
 export function CommentThread({
   comment,
-  number,
   attached,
   team,
   onTeamChange,
   onReply,
   onSetStatus,
+  onDelete,
   onClose,
 }: CommentThreadProps) {
-  const [statusPending, setStatusPending] = useState(false);
-  const [statusError, setStatusError] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
+  const [actionError, setActionError] = useState<string | null>(null);
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
   const resolved = comment.status === "resolved";
 
-  async function toggleStatus() {
-    setStatusPending(true);
-    setStatusError(null);
+  async function runAction(action: () => Promise<void>, failure: string) {
+    setPending(true);
+    setActionError(null);
     try {
-      await onSetStatus(resolved ? "open" : "resolved");
+      await action();
     } catch (error) {
-      setStatusError(error instanceof Error ? error.message : "Could not update status.");
+      setActionError(error instanceof Error ? error.message : failure);
     } finally {
-      setStatusPending(false);
+      setPending(false);
     }
   }
 
   return (
-    <section className={styles.card} aria-label={`Comment ${number}`}>
+    <section className={styles.card} aria-label={`Comment ${comment.number}`}>
       <header className={styles.cardHeader}>
         <span className={styles.markerStatic} style={teamStyle(comment.team)}>
-          {number}
+          {comment.number}
         </span>
         <span className={styles.cardTitle}>{resolved ? "Resolved" : "Open"}</span>
-        <button type="button" onClick={toggleStatus} disabled={statusPending} className={styles.button}>
+        <button
+          type="button"
+          onClick={() => runAction(() => onSetStatus(resolved ? "open" : "resolved"), "Could not update status.")}
+          disabled={pending}
+          className={styles.button}
+        >
           {resolved ? "Reopen" : "Resolve"}
+        </button>
+        <button
+          type="button"
+          onClick={() => setConfirmingDelete(true)}
+          disabled={pending}
+          aria-label="Delete comment"
+          title="Delete comment"
+          className={styles.iconButton}
+        >
+          <TrashIcon />
         </button>
         <button type="button" onClick={onClose} aria-label="Close thread" className={styles.iconButton}>
           ×
         </button>
       </header>
 
+      {confirmingDelete && (
+        <div className={styles.confirm} role="alertdialog" aria-label="Delete comment">
+          <p className={styles.confirmText}>
+            Delete comment #{comment.number}
+            {comment.replies.length > 0 &&
+              ` and ${comment.replies.length} ${comment.replies.length === 1 ? "reply" : "replies"}`}
+            ? This can’t be undone.
+          </p>
+          <div className={styles.actions}>
+            <button
+              type="button"
+              onClick={() => setConfirmingDelete(false)}
+              disabled={pending}
+              className={styles.button}
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={() => runAction(onDelete, "Could not delete comment.")}
+              disabled={pending}
+              className={styles.buttonDanger}
+            >
+              {pending ? "Deleting…" : "Delete"}
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className={styles.threadScroll}>
         {!attached && (
           <p className={styles.notice}>The original element was not found. Showing the approximate position.</p>
         )}
-        {statusError && (
+        {actionError && (
           <p role="alert" className={styles.error}>
-            {statusError}
+            {actionError}
           </p>
         )}
         <ThreadMessage team={comment.team} message={comment.message} createdAt={comment.createdAt} />

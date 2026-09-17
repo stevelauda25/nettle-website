@@ -1,5 +1,6 @@
 import { Container } from "./container";
 import { GridOverlay } from "./grid-overlay";
+import { GRID_QA_ENABLED } from "./grid-qa";
 
 type PageGridOverlayProps = {
   visible: boolean;
@@ -11,7 +12,7 @@ type PageGridOverlayProps = {
  * as every full-width section's Container, so columns still match content.
  */
 export function PageGridOverlay({ visible }: PageGridOverlayProps) {
-  if (!visible || process.env.NODE_ENV === "production") return null;
+  if (!visible || !GRID_QA_ENABLED) return null;
 
   return (
     <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[60]">

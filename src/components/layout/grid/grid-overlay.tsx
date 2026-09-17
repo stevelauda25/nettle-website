@@ -9,8 +9,10 @@ type GridOverlayProps = {
   baseline?: boolean;
 };
 
+import { GRID_QA_ENABLED } from "./grid-qa";
+
 /**
- * Development-only grid overlay.
+ * Grid QA overlay (development and internal review builds, see grid-qa.ts).
  *
  * MUST be rendered inside the same <Container> as the content it's checking —
  * it reads the identical --grid-margin/--grid-columns/--grid-gutter tokens,
@@ -19,10 +21,10 @@ type GridOverlayProps = {
  *
  * - pointer-events: none — never intercepts clicks
  * - hidden by default (visible=false renders nothing)
- * - stripped from production builds entirely, regardless of the query param
+ * - stripped from public production builds (GRID_QA_ENABLED false), regardless of the query param
  */
 export function GridOverlay({ visible, baseline = false }: GridOverlayProps) {
-  if (!visible || process.env.NODE_ENV === "production") return null;
+  if (!visible || !GRID_QA_ENABLED) return null;
 
   return (
     <div

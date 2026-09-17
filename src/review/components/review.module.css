@@ -25,15 +25,6 @@
   box-sizing: border-box;
 }
 
-.srOnly {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
-
 /* Layers ------------------------------------------------------------------ */
 
 .layer {
@@ -271,8 +262,7 @@
   font-size: 12px;
 }
 
-.select,
-.selectDark {
+.select {
   appearance: none;
   height: 30px;
   padding: 0 28px 0 10px;
@@ -292,19 +282,7 @@
   color: var(--rv-ink);
 }
 
-.selectDark {
-  height: 32px;
-  border: 0;
-  border-radius: 999px;
-  background-color: rgb(255 255 255 / 0.1);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23d4d4d8' stroke-width='1.5'/%3E%3C/svg%3E");
-  color: #fafafa;
-  font-weight: 500;
-}
 
-.selectDark option {
-  color: var(--rv-ink);
-}
 
 .textarea {
   width: 100%;
@@ -361,7 +339,39 @@
   color: #fff;
 }
 
+.buttonDanger {
+  height: 30px;
+  padding: 0 12px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: var(--rv-danger);
+  color: #fff;
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.buttonDanger:focus-visible {
+  outline: 2px solid var(--rv-danger);
+  outline-offset: 1px;
+}
+
+.confirm {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--rv-soft);
+  background: #fef2f2;
+}
+
+.confirmText {
+  margin: 0;
+  color: #7f1d1d;
+}
+
 .button:disabled,
+.buttonDanger:disabled,
 .buttonPrimary:disabled {
   opacity: 0.5;
   cursor: not-allowed;
@@ -394,31 +404,52 @@
 
 /* Toolbar ----------------------------------------------------------------- */
 
+/* Floating control, bottom-right: white "Comment" pill (collapsed) or small white card (expanded). */
 .toolbar {
   position: fixed;
+  right: 16px;
   bottom: 16px;
-  left: 50%;
   z-index: 2147483600;
-  display: flex;
-  transform: translateX(-50%);
-  align-items: center;
-  gap: 4px;
   max-width: calc(100vw - 32px);
-  padding: 4px;
-  border-radius: 999px;
-  background: var(--rv-ink);
-  color: #fafafa;
+  background: #fff;
+  color: var(--rv-ink);
   box-shadow:
-    0 0 0 1px rgb(255 255 255 / 0.08),
-    0 8px 24px rgb(0 0 0 / 0.25);
+    0 0 0 1px rgb(0 0 0 / 0.08),
+    0 8px 24px rgb(0 0 0 / 0.16);
 }
 
-.toolbarButton {
+/* Stack directly above the Grid toggle when the page has one (26px tall + 8px gap). */
+:global(body:has([data-grid-toggle])) .toolbar {
+  bottom: calc(16px + 26px + 8px);
+}
+
+/* Keep the card clear of the comments sidebar; the Grid toggle is covered there, so no stacking offset. */
+.toolbarBesideSidebar {
+  right: calc(360px + 16px);
+}
+
+:global(body:has([data-grid-toggle])) .toolbarBesideSidebar {
+  bottom: 16px;
+}
+
+@media (max-width: 640px) {
+  /* The sidebar is (nearly) full width: float the card over its bottom instead. */
+  .toolbarBesideSidebar {
+    right: 16px;
+  }
+}
+
+.toolbarCollapsed {
+  padding: 4px;
+  border-radius: 999px;
+}
+
+.toggleButton {
   display: inline-flex;
   align-items: center;
   gap: 6px;
   height: 32px;
-  padding: 0 12px;
+  padding: 0 14px 0 12px;
   border: 0;
   border-radius: 999px;
   background: transparent;
@@ -429,61 +460,111 @@
   cursor: pointer;
 }
 
-/* Icon-only on phones so the expanded toolbar fits. */
-@media (max-width: 480px) {
-  .toolbarLabel {
-    display: none;
-  }
+.toggleButton:hover {
+  background: var(--rv-soft);
 }
 
-.toolbarButton:hover {
-  background: rgb(255 255 255 / 0.1);
+.toolbarCard {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 224px;
+  padding: 6px;
+  border-radius: 12px;
 }
 
-.toolbarButton[aria-pressed="true"] {
+.toolbarHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 2px 4px 8px;
+}
+
+.toolbarTitle {
+  margin: 0;
+  color: var(--rv-muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.toolbarRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  height: 34px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 500;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.toolbarRow:hover {
+  background: var(--rv-soft);
+}
+
+.toolbarRow[aria-pressed="true"] {
   background: var(--rv-accent);
   color: #fff;
 }
 
-.toolbarButton:focus-visible,
-.toolbarIcon:focus-visible,
-.selectDark:focus-visible {
-  outline: 2px solid #fff;
+.toolbarRowLabel {
+  flex: 1;
+}
+
+.toolbarTeam {
+  padding: 4px 2px 4px 8px;
+}
+
+.toolbarTeam .select {
+  min-width: 0;
+}
+
+.toggleButton:focus-visible,
+.toolbarRow:focus-visible {
+  outline: 2px solid var(--rv-accent);
   outline-offset: 1px;
 }
 
-.toolbarIcon {
-  width: 32px;
-  height: 32px;
-  border: 0;
-  border-radius: 999px;
-  background: transparent;
-  color: #a1a1aa;
-  font: 400 20px/1 ui-sans-serif, system-ui, sans-serif;
-  cursor: pointer;
-}
-
-.toolbarIcon:hover {
-  background: rgb(255 255 255 / 0.1);
-  color: #fff;
-}
-
+.kbd,
 .count,
 .countError {
-  min-width: 18px;
+  min-width: 20px;
   padding: 1px 5px;
-  border-radius: 999px;
+  border-radius: 6px;
   font-size: 11px;
   font-weight: 600;
   text-align: center;
 }
 
+.kbd {
+  border: 1px solid var(--rv-line);
+  color: var(--rv-muted);
+  font-weight: 500;
+}
+
+.toolbarRow[aria-pressed="true"] .kbd {
+  border-color: rgb(255 255 255 / 0.4);
+  color: #fff;
+}
+
 .count {
-  background: rgb(255 255 255 / 0.15);
+  background: var(--rv-soft);
+}
+
+.toolbarRow[aria-pressed="true"] .count {
+  background: rgb(255 255 255 / 0.2);
 }
 
 .countError {
   background: var(--rv-danger);
+  color: #fff;
 }
 
 /* Sidebar ----------------------------------------------------------------- */
@@ -568,7 +649,8 @@
 .list {
   flex: 1;
   margin: 0;
-  padding: 0;
+  /* Room for the floating toolbar over the end of the list. */
+  padding: 0 0 72px;
   overflow-y: auto;
   list-style: none;
   border-top: 1px solid var(--rv-soft);
