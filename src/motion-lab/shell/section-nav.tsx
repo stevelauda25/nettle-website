@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { CONCEPT_STATE_LABELS, ORIGINAL_ID, sectionHighestState } from "../registry";
-import type { SectionMeta } from "../types";
+import { CONCEPT_STATE_LABELS, ORIGINAL_ID, OWNER_LABELS, sectionHighestState } from "../registry";
+import type { ConceptMeta, SectionMeta } from "../types";
 import { ConceptStateChip } from "./state-chips";
 import styles from "./lab.module.css";
 
@@ -15,10 +15,16 @@ type SectionNavProps = {
 
 const ownerInitial = (owner: string) => owner.charAt(0).toUpperCase();
 
+/** Title, state name or owner name: typing "rycho" lists one designer's Concepts. */
+const conceptMatches = (concept: ConceptMeta, query: string) =>
+  concept.title.toLowerCase().includes(query) ||
+  CONCEPT_STATE_LABELS[concept.state].toLowerCase().includes(query) ||
+  OWNER_LABELS[concept.owner].toLowerCase().includes(query);
+
 /**
  * Left pane: homepage parts in production order. The selected section is
  * expanded and shows Original first, then its Concepts with state and owner.
- * The filter narrows by section title, concept title or state name.
+ * The filter narrows by section title, concept title, state name or owner.
  */
 export function SectionNav({ sections, selectedSectionId, selectedEntryId }: SectionNavProps) {
   const [filter, setFilter] = useState("");
@@ -27,10 +33,7 @@ export function SectionNav({ sections, selectedSectionId, selectedEntryId }: Sec
   const visible = sections.filter((section) => {
     if (!query) return true;
     if (section.title.toLowerCase().includes(query)) return true;
-    return section.concepts.some(
-      (concept) =>
-        concept.title.toLowerCase().includes(query) || CONCEPT_STATE_LABELS[concept.state].toLowerCase().includes(query),
-    );
+    return section.concepts.some((concept) => conceptMatches(concept, query));
   });
 
   return (
@@ -55,12 +58,7 @@ export function SectionNav({ sections, selectedSectionId, selectedEntryId }: Sec
           const selected = section.id === selectedSectionId;
           const highest = sectionHighestState(section);
           const concepts = query
-            ? section.concepts.filter(
-                (concept) =>
-                  concept.title.toLowerCase().includes(query) ||
-                  CONCEPT_STATE_LABELS[concept.state].toLowerCase().includes(query) ||
-                  section.title.toLowerCase().includes(query),
-              )
+            ? section.concepts.filter((concept) => conceptMatches(concept, query) || section.title.toLowerCase().includes(query))
             : section.concepts;
           return (
             <li key={section.id} className={styles.sectionItem} data-selected={selected ? "" : undefined}>
@@ -94,14 +92,16 @@ export function SectionNav({ sections, selectedSectionId, selectedEntryId }: Sec
                       >
                         <span>{concept.title}</span>
                         <span className={styles.entryHint}>
-                          <span className={styles.owner} title={concept.owner}>{ownerInitial(concept.owner)}</span>
+                          <span className={styles.owner} title={OWNER_LABELS[concept.owner]} aria-label={OWNER_LABELS[concept.owner]}>
+                            {ownerInitial(concept.owner)}
+                          </span>
                           <ConceptStateChip state={concept.state} />
                         </span>
                       </Link>
                     </li>
                   ))}
                   {selected && section.concepts.length === 0 && (
-                    <li className={styles.entryEmpty}>Concepts appear here once a storyline is approved.</li>
+                    <li className={styles.entryEmpty}>No Concepts registered for this section yet.</li>
                   )}
                 </ul>
               )}

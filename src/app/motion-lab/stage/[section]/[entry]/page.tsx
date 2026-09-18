@@ -18,7 +18,9 @@ export default async function MotionLabStage({ params, searchParams }: PageProps
     const loadOriginal = originals[sectionId];
     if (!selection || !loadOriginal) notFound();
 
-    // Concepts render their experiment once they exist; every entry today is an Original.
+    // A Concept renders its implementation once Gate 1 has passed and it exists.
+    // Until then (every Concept today is at Storyline) it previews the section's
+    // Original, unchanged.
     const { Original } = await loadOriginal();
     const mode = modeFromSearchParams(query);
 

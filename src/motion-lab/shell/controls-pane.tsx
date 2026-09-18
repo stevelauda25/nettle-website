@@ -11,9 +11,11 @@ import styles from "./lab.module.css";
 export function ControlsPane({ selection }: { selection: Selection | null }) {
   const note = !selection
     ? "Choose a section to see its controls."
-    : selection.concept
-      ? "Controls arrive with tuning. Until then this Concept's values are edited by its author."
-      : "Original has nothing to tune. Controls appear once a Concept exists for this section.";
+    : selection.concept?.state === "storyline"
+      ? "Nothing to tune yet. Controls appear once this Concept's storyline is approved and a Draft exists."
+      : selection.concept
+        ? "Controls arrive with tuning. Until then this Concept's values are edited by its author."
+        : "Original has nothing to tune. Controls appear once a Concept exists for this section.";
 
   return (
     <aside className={styles.controls} aria-label="Motion controls">

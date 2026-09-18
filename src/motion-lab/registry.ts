@@ -26,7 +26,7 @@ import siteHeader from "./sections/site-header";
 import solutionsByRole from "./sections/solutions-by-role";
 import testimonial from "./sections/testimonial";
 import videoExplainer from "./sections/video-explainer";
-import type { ConceptMeta, ConceptState, SectionMeta, ValuesState } from "./types";
+import type { ConceptMeta, ConceptState, Owner, SectionMeta, ValuesState } from "./types";
 
 export const ORIGINAL_ID = "original";
 
@@ -72,6 +72,12 @@ export const CONCEPT_STATE_LABELS: Record<ConceptState, string> = {
   "in-review": "In review",
   approved: "Approved",
   live: "Live",
+};
+
+/** Designer names as they read in the shell. */
+export const OWNER_LABELS: Record<Owner, string> = {
+  rycho: "Rycho",
+  agil: "Agil",
 };
 
 export const VALUES_STATE_LABELS: Record<ValuesState, string> = {

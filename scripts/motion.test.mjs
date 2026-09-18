@@ -43,6 +43,8 @@ function loadRegistry() {
     const concepts = [...conceptsBlock.matchAll(/\{[\s\S]*?\}/g)].map((block) => ({
       id: block[0].match(/id: "([^"]+)"/)?.[1],
       state: block[0].match(/state: "([^"]+)"/)?.[1],
+      owner: block[0].match(/owner: "([^"]+)"/)?.[1],
+      visual: block[0].match(/visual: "([^"]+)"/)?.[1],
     }));
     return { folder, id: field("id"), componentName: field("componentName"), path: field("path"), kind: field("kind"), concepts };
   });
@@ -128,6 +130,9 @@ test("The registry mirrors the homepage composition, in order", () => {
 });
 
 test("Every Concept folder carries an approved storyline (Gate 1) and a registry entry", () => {
+  // A Concept is registered first and waits at "storyline" with no folder;
+  // the folder appears when storyline work begins. Code is allowed only once
+  // storyline.md carries the approval line.
   for (const section of loadRegistry()) {
     const dir = `src/motion-lab/sections/${section.id}`;
     const folders = readdirSync(resolve(root, dir)).filter((name) => statSync(resolve(root, dir, name)).isDirectory());
@@ -145,7 +150,17 @@ test("Every Concept folder carries an approved storyline (Gate 1) and a registry
         assert.match(text, /^Approved by: \S.*\bon\b \d{4}-\d{2}-\d{2}/m, `${storyline}: Gate 1 approval line`);
       }
     }
-    for (const concept of section.concepts) assert.ok(folders.includes(concept.id), `${section.id}/${concept.id}: folder exists`);
+    const data = existsSync(resolve(root, section.path, "../data.ts")) ? read(resolve(section.path, "../data.ts")) : null;
+    for (const concept of section.concepts) {
+      if (concept.state !== "storyline") assert.ok(folders.includes(concept.id), `${section.id}/${concept.id}: folder exists`);
+      assert.ok(["rycho", "agil"].includes(concept.owner), `${section.id}/${concept.id}: owner is a Motion Designer`);
+      if (concept.visual) {
+        assert.ok(data, `${section.id}/${concept.id}: section data to resolve visual "${concept.visual}"`);
+        assert.match(data, new RegExp(`visual: "${concept.visual}"`), `${section.id}/${concept.id}: visual "${concept.visual}" exists in production data`);
+      }
+    }
+    const ids = section.concepts.map((concept) => concept.id);
+    assert.equal(new Set(ids).size, ids.length, `${section.id}: concept ids are unique`);
   }
 });
 
@@ -160,6 +175,13 @@ test("Live motion stays in src/motion/sections and animates only compositor-safe
       `${path}: layout properties are not animated`,
     );
   }
+});
+
+test("The shared Motion Rules exist at the repository root", () => {
+  // Presence only. The prose is the Motion Designers' to refine without touching tests.
+  const path = resolve(root, "MOTION_RULES.md");
+  assert.ok(existsSync(path), "MOTION_RULES.md is the shared source of truth for motion work");
+  assert.ok(statSync(path).size > 0, "MOTION_RULES.md is not empty");
 });
 
 test("Existing suites remain and every suite is wired into package.json", () => {

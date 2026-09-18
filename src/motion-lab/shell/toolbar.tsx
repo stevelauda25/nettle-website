@@ -1,6 +1,6 @@
 "use client";
 
-import type { Selection } from "../registry";
+import { OWNER_LABELS, type Selection } from "../registry";
 import type { StageStatus } from "../stage/channel";
 import { VIEWPORTS, type ViewportId } from "./viewports";
 import { ConceptStateChip } from "./state-chips";
@@ -63,7 +63,11 @@ export function Toolbar({
               <span className={styles.crumbCurrent}>{selection.concept ? selection.concept.title : "Original"}</span>
               <ConceptStateChip state={selection.concept ? selection.concept.state : "original"} />
               <span className={styles.productionLine}>
-                {selection.concept ? "Concept" : "In production now: no motion"}
+                {selection.concept
+                  ? `${OWNER_LABELS[selection.concept.owner]} · ${
+                      selection.concept.state === "storyline" ? "previewing the production Original" : "Concept"
+                    }`
+                  : "In production now: no motion"}
               </span>
             </>
           ) : (

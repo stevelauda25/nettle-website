@@ -24,11 +24,19 @@ export type ConceptMeta = {
   owner: Owner;
   state: ConceptState;
   /**
-   * Path of the colocated storyline.md, relative to the section folder. A
-   * Concept can only reach `draft` once this file carries an approval line
-   * (Gate 1); the guard test enforces it.
+   * Path of the colocated storyline.md, relative to the section folder. It is
+   * created when storyline work begins, so a Concept at `storyline` may exist
+   * before the file does. A Concept can only carry code or leave `storyline`
+   * once the file has an approval line (Gate 1); the guard test enforces it.
    */
   storyline: string;
+  /**
+   * The production visual inside the section this Concept animates, named by
+   * the key the section's own data uses (for Business Lines, the `visual` key
+   * in data.ts). The Concept previews the section's Original; this says which
+   * part of it is the subject. Omitted when the Concept covers the whole part.
+   */
+  visual?: string;
 };
 
 export type SectionMeta = {
