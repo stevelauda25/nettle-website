@@ -1,14 +1,15 @@
-/* Stage runway: neutral space above and below the production part so scroll
-   entry and exit can be observed. Uses lab tokens only; never brand surfaces. */
+/* Stage runway: neutral gray space above and below the production part so
+   scroll entry and exit can be observed. Lab-local grays, matching the shell's
+   workspace; never brand surfaces. The part itself is untouched. */
 .runway {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 45vh;
   background:
-    repeating-linear-gradient(135deg, rgba(42, 40, 38, 0.04) 0 8px, transparent 8px 20px),
-    var(--color-warm-gray-200);
-  color: var(--color-warm-gray-700);
+    repeating-linear-gradient(135deg, rgba(24, 26, 29, 0.05) 0 8px, transparent 8px 20px),
+    #e2e3e1;
+  color: #5f6368;
   font-family: var(--font-body);
   font-size: 12px;
   letter-spacing: 0.06em;
