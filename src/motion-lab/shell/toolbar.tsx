@@ -65,8 +65,8 @@ export function Toolbar({
               <span className={styles.productionLine}>
                 {selection.concept
                   ? `${OWNER_LABELS[selection.concept.owner]} · ${
-                      selection.concept.state === "storyline" ? "previewing the production Original" : "Concept"
-                    }`
+                      selection.concept.visual ? "key visual workspace" : "Concept"
+                    }${selection.concept.state === "storyline" ? " · at rest until its storyline is approved" : ""}`
                   : "In production now: no motion"}
               </span>
             </>

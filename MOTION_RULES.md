@@ -290,7 +290,7 @@ Development-only workspace at `/motion-lab` under `next dev`. Everything below e
 - **Sections and Concepts.** The left navigation lists the homepage sections in page order. Each opens on its **Original**, the production component exactly as the site renders it. Concepts appear under a section once registered; each shows its owner and state chip. A filter narrows sections, Concepts and states.
 - **Storyline.** Below the preview. The Original has none. A Concept's storyline is shown from its `storyline.md` once Concepts exist.
 - **Viewport presets.** Desktop 1440 × 900, Tablet 768 × 1024, Mobile 390 × 844, and Fluid. Previews render in real iframes at true widths, so media and container queries behave as on the site.
-- **Compare.** Motion, Original, or Side by side (Original and Motion with synchronised scrolling).
+- **Compare.** Motion, Original, or Side by side. For an Original entry, Motion and Original show the same production part. For a Concept that names a production visual (every Business Lines Concept), **Motion** shows that key visual alone as the focused workspace, at its real production size for the chosen viewport; **Original** shows the whole production section unchanged; **Side by side** pairs the isolated visual with the full section, focused work beside real context.
 - **Playback.** Play, Pause, Replay, Reset, with a readout of play state, time and duration. Scroll-driven animations report no time and are scrubbed by scrolling.
 - **Reduced motion.** A toggle forces the reduced-motion mode inside the preview; the readout also shows the operating-system setting.
 - **Grid.** Overlays the 12-column layout grid inside the preview.

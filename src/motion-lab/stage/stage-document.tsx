@@ -11,7 +11,12 @@ type StageDocumentProps = {
   section: SectionMeta;
   entryId: string;
   mode: StageMode;
-  /** The production part, rendered on the server. */
+  /**
+   * One production visual alone (a Concept's Motion view): centred in the
+   * viewport with no runway. Otherwise the whole part with its runways.
+   */
+  focus?: boolean;
+  /** The production part or visual, rendered on the server. */
   children: ReactNode;
 };
 
@@ -23,8 +28,13 @@ type StageDocumentProps = {
  * homepage. The header is sticky and sits at the top; everything else gets a
  * runway above and below.
  */
-export function StageDocument({ section, entryId, mode, children }: StageDocumentProps) {
-  const runway = section.kind === "section";
+export function StageDocument({ section, entryId, mode, focus = false, children }: StageDocumentProps) {
+  const runway = !focus && section.kind === "section";
+  const scope = (
+    <MotionScope name={focus ? `${section.id}/${entryId}` : section.id} spec={EMPTY_SPEC} enabled={mode.motion} forceReduced={mode.reduced}>
+      {children}
+    </MotionScope>
+  );
   return (
     <StageRoot entry={`${section.id}/${entryId}`} mode={mode}>
       {runway && (
@@ -32,9 +42,7 @@ export function StageDocument({ section, entryId, mode, children }: StageDocumen
           <span>scroll to enter {section.title}</span>
         </div>
       )}
-      <MotionScope name={section.id} spec={EMPTY_SPEC} enabled={mode.motion} forceReduced={mode.reduced}>
-        {children}
-      </MotionScope>
+      {focus ? <div className={styles.focus}>{scope}</div> : scope}
       {runway && (
         <div className={styles.runway} aria-hidden="true">
           <span>{section.title} exit</span>

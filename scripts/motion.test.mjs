@@ -161,6 +161,17 @@ test("Every Concept folder carries an approved storyline (Gate 1) and a registry
     }
     const ids = section.concepts.map((concept) => concept.id);
     assert.equal(new Set(ids).size, ids.length, `${section.id}: concept ids are unique`);
+
+    // A section whose Concepts name a visual exposes it through one server-side
+    // seam that renders the production artwork component, never a copy of it.
+    if (section.concepts.some((concept) => concept.visual)) {
+      const visual = `src/motion-lab/sections/${section.id}/visual.tsx`;
+      assert.ok(existsSync(resolve(root, visual)), `${visual}: focused Motion view for this section's Concepts`);
+      const source = read(visual);
+      assert.match(source, /from "@\/components\//, `${visual}: renders the production artwork`);
+      assert.doesNotMatch(source, /use client|<svg|<path|<Image/, `${visual}: no client boundary and no redrawn artwork`);
+      assert.match(read("src/motion-lab/stage/originals.ts"), new RegExp(`sections/${section.id}/visual`), `${section.id}: stage can resolve the visual`);
+    }
   }
 });
 

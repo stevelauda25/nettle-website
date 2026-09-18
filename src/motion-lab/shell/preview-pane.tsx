@@ -83,12 +83,17 @@ export function PreviewPane({ selection, viewport, compare, reduced, grid, reloa
     return `${preset.label} · ${dims}${shown}`;
   };
 
+  // A Concept that names a production visual shows that visual alone in
+  // Motion, and the whole part in Original: focused work beside real context.
+  const focused = selection.concept?.visual ? selection.concept.title : null;
+  const motionLabel = focused ? `Motion · ${focused} alone` : selection.concept ? `Motion · ${selection.concept.title}` : "Motion (same as Original)";
+  const originalLabel = focused ? `Original · ${selection.section.title} section` : "Original";
   const frames: { frame: FrameId; motion: boolean; label: string }[] = side
     ? [
-        { frame: "a", motion: false, label: "Original" },
-        { frame: "b", motion: true, label: selection.concept ? selection.concept.title : "Motion (same as Original)" },
+        { frame: "a", motion: false, label: originalLabel },
+        { frame: "b", motion: true, label: motionLabel },
       ]
-    : [{ frame: "a", motion: compare === "motion", label: compare === "motion" ? "Motion" : "Original" }];
+    : [{ frame: "a", motion: compare === "motion", label: compare === "motion" ? motionLabel : originalLabel }];
 
   return (
     <section className={styles.preview} data-side={side ? "" : undefined} aria-label="Live preview">

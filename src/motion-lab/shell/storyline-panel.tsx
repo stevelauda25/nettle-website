@@ -17,7 +17,10 @@ export function StorylinePanel({ selection }: { selection: Selection | null }) {
       ) : selection.concept?.state === "storyline" ? (
         <p className={styles.paneNote}>
           No storyline yet. Directions for “{selection.concept.title}” are developed with its owner and recorded in its storyline
-          file; Gate 1 approval unlocks implementation. Until then this Concept previews the production Original.
+          file; Gate 1 approval unlocks implementation.
+          {selection.concept.visual
+            ? " Motion shows this key visual alone, at rest; Original shows it inside the production section."
+            : " Until then this Concept previews the production Original."}
         </p>
       ) : selection.concept ? (
         <p className={styles.paneNote}>Storyline for “{selection.concept.title}” will render here from its approved storyline file.</p>

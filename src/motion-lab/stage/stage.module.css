@@ -1,3 +1,23 @@
+/* Focus: one production visual alone, centred in the viewport for
+   inspection. The visual keeps its own production width and aspect ratio; only
+   its placement belongs to the lab. */
+.focus {
+  min-height: 100svh;
+  display: grid;
+  align-content: center;
+  padding-block: 24px;
+  /* The lab's workspace gray (same value as the shell canvas and the runway),
+     so the white visual reads as a canvas sitting on the workspace. */
+  background: #e2e3e1;
+}
+
+/* The visual's own surface: white as in production, with a minimal edge so
+   its boundary is legible against the gray. Nothing inside it is styled. */
+.subject {
+  background: var(--color-white);
+  box-shadow: 0 0 0 1px rgba(24, 26, 29, 0.1), 0 2px 12px rgba(24, 26, 29, 0.08);
+}
+
 /* Stage runway: neutral gray space above and below the production part so
    scroll entry and exit can be observed. Lab-local grays, matching the shell's
    workspace; never brand surfaces. The part itself is untouched. */

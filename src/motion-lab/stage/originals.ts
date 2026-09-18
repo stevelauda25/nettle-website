@@ -8,6 +8,7 @@
 import type { ComponentType } from "react";
 
 type OriginalModule = { Original: ComponentType };
+type VisualModule = { Visual: ComponentType<{ visual: string }> };
 
 export const originals: Record<string, () => Promise<OriginalModule>> = {
   "site-header": () => import("../sections/site-header/original"),
@@ -22,4 +23,13 @@ export const originals: Record<string, () => Promise<OriginalModule>> = {
   security: () => import("../sections/security/original"),
   cta: () => import("../sections/cta/original"),
   footer: () => import("../sections/footer/original"),
+};
+
+/**
+ * Sections whose Concepts name one production visual inside the part. The
+ * stage renders that visual alone in the Motion view; the Original view is
+ * always the whole part. Same dependency direction: lab → components.
+ */
+export const visuals: Record<string, () => Promise<VisualModule>> = {
+  "business-lines": () => import("../sections/business-lines/visual"),
 };
