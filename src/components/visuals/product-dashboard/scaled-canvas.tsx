@@ -1,4 +1,5 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
+import styles from "./scaled-canvas.module.css";
 
 type ScaledCanvasProps = {
   /** Design size of the canvas in px; content lays out at this size. */
@@ -26,8 +27,8 @@ export function ScaledCanvas({ width, height, label, className = "", children }:
       <div
         aria-hidden="true"
         data-slot="scaled-canvas"
-        className="absolute top-0 left-0 origin-top-left select-none"
-        style={{ width, height, scale: `tan(atan2(100cqw, ${width}px))` }}
+        className={`absolute top-0 left-0 origin-top-left select-none ${styles.canvas}`}
+        style={{ width, height, "--canvas-design-width": `${width}px` } as CSSProperties}
       >
         {children}
       </div>

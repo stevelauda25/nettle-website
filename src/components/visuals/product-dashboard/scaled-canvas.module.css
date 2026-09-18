@@ -1,0 +1,14 @@
+.canvas {
+  /* Preserve the existing fallback for browsers without typed division. */
+  scale: tan(atan2(100cqw, var(--canvas-design-width)));
+}
+
+@supports (scale: calc(1px / 1px)) {
+  .canvas {
+    /* Divide resolved lengths directly instead of converting through angles.
+     * Resolve cqw on this child of the query container, not on the container
+     * itself. Keep the same ratio at every viewport, including desktop Safari.
+     */
+    scale: calc(100cqw / var(--canvas-design-width));
+  }
+}
