@@ -9,7 +9,12 @@
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
     "test:typography": "node --test scripts/typography.test.mjs",
-    "test:spacing": "node --test scripts/spacing.test.mjs"
+    "test:spacing": "node --test scripts/spacing.test.mjs",
+    "test:performance": "node --test scripts/performance.test.mjs",
+    "test:usage": "node --test scripts/usage-guidelines.test.mjs",
+    "test:motion": "node --test scripts/motion.test.mjs",
+    "test:motion-build": "node --test scripts/motion-build.test.mjs",
+    "test": "node --test scripts/*.test.mjs"
   },
   "dependencies": {
     "lenis": "1.3.26",
