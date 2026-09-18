@@ -1,23 +1,12 @@
 import Image from "next/image";
 import { Container, Grid } from "@/components/layout/grid";
-
-type ChallengeState = {
-  id: "state-1";
-  firstLine: string;
-  secondLineLead: string;
-  emphasis: string;
-};
-
-const stateOne: ChallengeState = {
-  id: "state-1",
-  firstLine: "90% of your time is spent at the desk.",
-  secondLineLead: "Your expertise ",
-  emphasis: "belongs in the field.",
-};
+import { ChallengeArtwork } from "./challenge-artwork";
+import { challengeStates, type ChallengeState } from "./challenge-data";
+import styles from "./challenge-today.module.css";
 
 function ChallengeBackdrop() {
   return (
-    <div data-slot="challenge-visual" className="pointer-events-none absolute inset-0" aria-hidden="true">
+    <div data-slot="challenge-visual" className={`pointer-events-none absolute inset-0 ${styles.visual}`} aria-hidden="true">
       <Image
         src="/assets/images/features/card-texture.png"
         alt=""
@@ -25,19 +14,21 @@ function ChallengeBackdrop() {
         sizes="100vw"
         className="object-cover opacity-30"
       />
+      <ChallengeArtwork />
     </div>
   );
 }
 
 function ChallengeStateContent({ state }: { state: ChallengeState }) {
+  const Tag = state.id === "state-1" ? "h2" : "p";
   return (
     <div
       data-slot="challenge-state"
       data-state={state.id}
-      className="col-span-12 text-center xl:col-start-3 xl:col-end-11"
+      className={`col-span-12 col-start-1 text-center xl:col-start-3 xl:col-end-11 ${styles.state}`}
     >
-      <h2
-        id="challenge-today-heading"
+      <Tag
+        id={state.id === "state-1" ? "challenge-today-heading" : undefined}
         className="text-display-statement text-balance text-white"
       >
         {state.firstLine}
@@ -51,23 +42,24 @@ function ChallengeStateContent({ state }: { state: ChallengeState }) {
         {" "}
         <span className="relative inline-block text-brand-50">
           {state.emphasis}
-          <Image
-            src="/assets/icons/challenge-today/state-1-underline.svg"
-            alt=""
+          <span
+            data-slot="challenge-underline"
             aria-hidden="true"
-            width={391}
-            height={11}
-            className="pointer-events-none absolute top-[calc(100%+4px)] left-0 h-auto w-full max-w-none"
-          />
+            className={`pointer-events-none absolute left-0 w-full ${styles.underline}`}
+            style={{ top: `calc(100% + ${state.underline.offset}px)`, aspectRatio: `${state.underline.width} / ${state.underline.height}` }}
+          >
+            <Image src={state.underline.src} alt="" fill />
+          </span>
         </span>
-      </h2>
+        {state.suffix}
+      </Tag>
     </div>
   );
 }
 
-// Figma: "The Challenge Today - State 1" (409:3580), 1440 × 928.
-// The backdrop is intentionally separate from the state content so future
-// scroll-driven states can replace the copy without rebuilding the visual stage.
+// Figma: 566:5762 → 409:3596 → 409:3612, each 1440 × 928.
+// Native scroll timelines drive the persistent artwork and all three statements.
+// No mobile state frames exist: cover-fit artwork is an inferred adaptation.
 // User-requested tighter mobile edges: reuse the 12px related-gap spacing role.
 // The shared Container/Grid still consume the inherited grid token.
 export function ChallengeToday() {
@@ -75,14 +67,16 @@ export function ChallengeToday() {
     <section
       aria-labelledby="challenge-today-heading"
       data-slot="challenge-today"
-      className="relative isolate h-screen overflow-hidden bg-black max-md:[--grid-margin:var(--space-related-gap)]"
+      className={`relative isolate bg-black max-md:[--grid-margin:var(--space-related-gap)] ${styles.track}`}
     >
-      <ChallengeBackdrop />
-      <Container className="h-full">
-        <Grid className="h-full items-center">
-          <ChallengeStateContent state={stateOne} />
-        </Grid>
-      </Container>
+      <div data-slot="challenge-stage" className={styles.stage}>
+        <ChallengeBackdrop />
+        <Container>
+          <Grid className={`items-center ${styles.contentGrid}`}>
+            {challengeStates.map((state) => <ChallengeStateContent key={state.id} state={state} />)}
+          </Grid>
+        </Container>
+      </div>
     </section>
   );
 }

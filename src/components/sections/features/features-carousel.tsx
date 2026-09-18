@@ -1,33 +1,14 @@
 "use client";
 
-import { useRef, type ReactNode } from "react";
+import { type ReactNode } from "react";
+import { useCarousel } from "@/components/ui/use-carousel";
 import { Container, Grid } from "@/components/layout/grid";
 import { CarouselControls } from "@/components/ui/carousel-controls";
 import carouselStyles from "@/components/layout/grid/carousel.module.css";
 
 // The cards and their visual components remain server-rendered children.
 export function FeaturesCarousel({ children }: { children: ReactNode }) {
-  const viewportRef = useRef<HTMLDivElement>(null);
-
-  function move(direction: -1 | 1) {
-    const viewport = viewportRef.current;
-    if (!viewport) return;
-
-    const current = viewport.scrollLeft;
-    const maximum = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
-    const cards = Array.from(viewport.querySelectorAll("[data-slot='feature-card']"));
-    const firstCardLeft = cards[0]?.getBoundingClientRect().left;
-    if (firstCardLeft === undefined) return;
-    const stops = [0, ...cards.map((card) =>
-      Math.min(maximum, Math.max(0, card.getBoundingClientRect().left - firstCardLeft)),
-    ), maximum];
-    // Choose an actual card boundary, including when returning from a clipped
-    // final scroll position or after a manual swipe between cards.
-    const target = direction === 1
-      ? stops.find((stop) => stop > current + 1) ?? maximum
-      : stops.findLast((stop) => stop < current - 1) ?? 0;
-    viewport.scrollTo({ left: target, behavior: "instant" });
-  }
+  const { viewportRef, available, move } = useCarousel("[data-slot='feature-card']");
 
   return (
     <>
@@ -37,7 +18,7 @@ export function FeaturesCarousel({ children }: { children: ReactNode }) {
             <h2 id="features-heading" className="text-heading-h3 max-w-[517px] text-balance text-black">
               The complete workspace for modern Loss Control.
             </h2>
-            <CarouselControls viewportRef={viewportRef} trackId="features-track" label="features" onMove={move} />
+            <CarouselControls available={available} trackId="features-track" label="features" onMove={move} />
           </div>
         </Grid>
       </Container>

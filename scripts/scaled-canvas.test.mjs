@@ -36,7 +36,7 @@ test("Canvas uses capability-gated direct division at all widths with the existi
 });
 
 // Cover every current design width, including both mobile testimonial heights.
-const canvases = [[340, 255], [340, 201], [370, 299], [416, 346], [448, 385], [500, 346], [1144, 701], [1144, 516], [1376, 527]];
+const canvases = [[340, 255], [340, 201], [370, 299], [416, 346], [448, 385], [500, 346], [1144, 701], [1144, 516], [1376, 527], [1440, 928]];
 const viewports = [375, 390, 393, 414, 430, 639, 640, 641, 767, 768, 769, 1023, 1024, 1025, 1279, 1280, 1281, 1440];
 
 for (const [width, height] of canvases) {

@@ -1,5 +1,6 @@
 import { GRID_QA_ENABLED, GridToggle, PageGridOverlay } from "@/components/layout/grid";
 import { SiteHeader } from "@/components/layout/site-header";
+import { SmoothScroll } from "@/components/layout/smooth-scroll";
 import { BusinessLines } from "@/components/sections/business-lines";
 import { ChallengeToday } from "@/components/sections/challenge-today";
 import { Features } from "@/components/sections/features";
@@ -18,6 +19,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
 
   return (
     <>
+      <SmoothScroll />
       <SiteHeader />
       <main>
         <Hero />
