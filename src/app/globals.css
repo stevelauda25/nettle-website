@@ -87,6 +87,16 @@
     overscroll-behavior: none;
   }
 
+  /* Match the viewport canvas to the topmost homepage surface. A transparent
+   * html otherwise propagates the light body background to the canvas, where
+   * it can contrast with the sticky edge during fractional-pixel painting.
+   * Keep body/section backgrounds unchanged and exclude the internal docs.
+   * This structural selector changes only on navigation, not on scrolling.
+   */
+  html:has(> body > header[data-site-header]) {
+    background-color: var(--color-warm-gray-950);
+  }
+
   body {
     font-family: var(--font-body);
     background-color: var(--color-warm-gray-100);

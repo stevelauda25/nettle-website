@@ -5,6 +5,7 @@ import { resolveAnchor, type ResolvedAnnotation } from "@/review/lib/annotation-
 import type { AnnotationAnchor } from "@/review/types/review";
 
 export type AnnotationEntry = { id: string; anchor: AnnotationAnchor };
+const EMPTY_POSITIONS: Record<string, ResolvedAnnotation> = {};
 
 function samePositions(a: Record<string, ResolvedAnnotation>, b: Record<string, ResolvedAnnotation>) {
   const keys = Object.keys(b);
@@ -33,7 +34,12 @@ export function useAnnotationPositions(entries: AnnotationEntry[]) {
   const [positions, setPositions] = useState<Record<string, ResolvedAnnotation>>({});
 
   useEffect(() => {
+    // Collapsed tools and empty comment lists have nothing to keep positioned.
+    if (entries.length === 0) return;
+
     let frame = 0;
+    let stopped = false;
+    let interval: number | undefined;
 
     const measure = () => {
       frame = 0;
@@ -42,26 +48,40 @@ export function useAnnotationPositions(entries: AnnotationEntry[]) {
       setPositions((prev) => (samePositions(prev, next) ? prev : next));
     };
     const schedule = () => {
-      if (!frame) frame = requestAnimationFrame(measure);
+      if (!stopped && document.visibilityState === "visible" && !frame) {
+        frame = requestAnimationFrame(measure);
+      }
+    };
+    const onVisibilityChange = () => {
+      window.clearInterval(interval);
+      interval = undefined;
+      if (document.visibilityState === "visible") {
+        schedule();
+        interval = window.setInterval(schedule, 1000);
+      } else {
+        cancelAnimationFrame(frame);
+        frame = 0;
+      }
     };
 
-    schedule();
+    onVisibilityChange();
     const resizeObserver = new ResizeObserver(schedule);
     resizeObserver.observe(document.body);
     window.addEventListener("scroll", schedule, { passive: true });
     window.addEventListener("resize", schedule);
-    const interval = window.setInterval(schedule, 1000);
+    document.addEventListener("visibilitychange", onVisibilityChange);
     document.fonts?.ready.then(schedule);
 
     return () => {
+      stopped = true;
       cancelAnimationFrame(frame);
-      frame = -1; // block schedules from a pending fonts promise
       resizeObserver.disconnect();
       window.removeEventListener("scroll", schedule);
       window.removeEventListener("resize", schedule);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
       window.clearInterval(interval);
     };
   }, [entries]);
 
-  return positions;
+  return entries.length === 0 ? EMPTY_POSITIONS : positions;
 }

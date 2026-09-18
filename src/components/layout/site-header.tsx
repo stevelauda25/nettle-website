@@ -7,7 +7,7 @@ type NavItem = { label: string; href: string; hasMenu: boolean };
 
 // "Resources" is hidden in Figma and intentionally omitted.
 const navItems: NavItem[] = [
-  { label: "Product", href: "#", hasMenu: true },
+  { label: "Product", href: "#", hasMenu: false },
   { label: "Solutions", href: "#", hasMenu: true },
   { label: "Customers", href: "#", hasMenu: false },
   { label: "Security", href: "#", hasMenu: false },
@@ -15,11 +15,14 @@ const navItems: NavItem[] = [
 ];
 
 export function SiteHeader() {
+  // Paint one CSS pixel above the sticky edge so fractional device-pixel
+  // clipping cannot reveal scrolling content there. This shadow has no blur
+  // and changes neither the header box nor its normal-flow height.
   return (
-    <header className="sticky top-0 z-50">
+    <header data-site-header="" className="sticky top-0 z-50 bg-warm-gray-950 shadow-[0_-1px_0_0_var(--color-warm-gray-950)]">
       <div className="flex items-center justify-center gap-x-2 bg-warm-gray-950 px-[var(--grid-margin)] text-center text-body-small-regular text-white md:px-2.5 md:py-1.5">
         <p className="min-w-0 truncate">Nettle raises $4.8M Seed to build the AI workspace for loss control.</p>
-        <Link href="#" className="flex min-h-11 shrink-0 items-center whitespace-nowrap underline md:min-h-0">
+        <Link href="#" className="relative flex min-h-10 shrink-0 items-center whitespace-nowrap underline before:absolute before:inset-x-0 before:-inset-y-0.5 md:min-h-0 md:before:hidden">
           Read Announcement →
         </Link>
       </div>

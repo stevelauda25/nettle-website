@@ -48,7 +48,7 @@ function FeatureCard({ feature }: { feature: Feature }) {
 
 // Figma: Features (409:3712), 1440 × 892. The card rail intentionally
 // continues beyond the grid-aligned viewport, matching the approved carousel
-// composition. Only keyboard scrolling requires client-side code.
+// composition. Button and keyboard scrolling require client-side code.
 export function Features() {
   return (
     <section aria-labelledby="features-heading" data-slot="features" className="overflow-hidden bg-white pt-(--space-section-major) pb-(--space-section-adjoining)">

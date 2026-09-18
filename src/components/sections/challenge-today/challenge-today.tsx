@@ -19,7 +19,7 @@ function ChallengeBackdrop() {
   return (
     <div data-slot="challenge-visual" className="pointer-events-none absolute inset-0" aria-hidden="true">
       <Image
-        src="/assets/images/challenge-today/state-1-background.png"
+        src="/assets/images/features/card-texture.png"
         alt=""
         fill
         sizes="100vw"

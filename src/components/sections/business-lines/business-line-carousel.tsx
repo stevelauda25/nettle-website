@@ -2,10 +2,11 @@
 
 import { useRef, type ReactNode } from "react";
 import { Container, Grid } from "@/components/layout/grid";
+import { CarouselControls } from "@/components/ui/carousel-controls";
 import carouselStyles from "@/components/layout/grid/carousel.module.css";
 import styles from "./business-lines.module.css";
 
-// Only keyboard scrolling needs a client ref; cards/artwork remain server
+// Button and keyboard scrolling need a client ref; cards/artwork remain server
 // children. Touch/trackpad scrolling and snapping are native, with no autoplay.
 export function BusinessLineCarousel({ children }: { children: ReactNode }) {
   const viewportRef = useRef<HTMLDivElement>(null);
@@ -31,12 +32,13 @@ export function BusinessLineCarousel({ children }: { children: ReactNode }) {
     <>
       <Container>
         <Grid>
-          <div className="col-span-12 text-left lg:col-start-2 lg:col-end-12">
+          <div className="col-span-12 flex items-end justify-between gap-(--space-content-gap) text-left lg:col-start-2 lg:col-end-12">
             <h2 id="business-lines-heading" className="text-heading-h3 text-balance text-black">
               One workspace across
               <br className="hidden sm:block" />{" "}
               every line of business.
             </h2>
+            <CarouselControls viewportRef={viewportRef} trackId="business-lines-track" label="business lines" onMove={move} />
           </div>
         </Grid>
       </Container>

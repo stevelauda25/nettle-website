@@ -69,8 +69,20 @@ Figma-style area comments for reviewing the site on staging (https://nettle-webs
 | `NEXT_PUBLIC_REVIEW_MODE` | `true` enables the tools and `/api/review/*` (build-time; redeploy after changing). Otherwise nothing renders and no review code ships. |
 | `DATABASE_URL` | Postgres connection string (added by the Vercel Neon integration). Server-only, never commit it. |
 | `REVIEW_ENVIRONMENT` | Optional scope label; defaults to `staging` on Vercel, `development` locally. |
+| `REVIEW_USE_STAGING` | With Review Mode enabled, `true` proxies `/api/review/*` to Nettle staging during `pnpm dev` only. Uses staging's database and scope; no local database credentials needed. Ignored by production builds. |
 
-Setup on Vercel: add the Neon Postgres integration to the project, set `NEXT_PUBLIC_REVIEW_MODE=true`, redeploy. Tables are created automatically on first use. Locally: copy `.env.example` to `.env.local`, fill both variables and run `pnpm dev`. Code lives in `src/review/` and `src/app/api/review/`.
+Setup on Vercel: add the Neon Postgres integration to the project, set `NEXT_PUBLIC_REVIEW_MODE=true`, redeploy. Tables are created automatically on first use. Code lives in `src/review/` and `src/app/api/review/`.
+
+To see client feedback on the local website, create a gitignored `.env.development.local`:
+
+```dotenv
+NEXT_PUBLIC_REVIEW_MODE=true
+REVIEW_USE_STAGING=true
+```
+
+Restart `pnpm dev` and open http://localhost:3000/?review=true. The local tools use the same live comments as staging, matched by page pathname. Replies, new comments, status changes and deletions made locally also update staging. This requires an internet connection; `.env.development.local` is not loaded by production builds.
+
+For isolated local review instead, set `REVIEW_USE_STAGING=false` and configure `DATABASE_URL` in `.env.development.local`; the scope defaults to `development`. `REVIEW_ENVIRONMENT` only controls the direct database mode, not the staging proxy.
 
 ## Status
 

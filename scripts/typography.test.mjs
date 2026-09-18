@@ -154,16 +154,24 @@ test("CTA mobile consumes its approved compact role without changing H5 or deskt
   assert.match(cardCss, /text-wrap: balance/);
 });
 
-test("All carousel headings are left-aligned and balanced without button controls", () => {
+test("Carousel headings stay left-aligned and balanced with desktop-only controls", () => {
   for (const path of ["features/features-carousel", "business-lines/business-line-carousel", "testimonial/testimonial-carousel"]) {
     const source = read(`src/components/sections/${path}.tsx`);
-    assert.match(source, /col-span-12 text-left lg:col-start-2 lg:col-end-12/);
+    assert.match(source, /col-span-12[^"\n]*text-left lg:col-start-2 lg:col-end-12/);
     assert.match(source, /<h2[^>]+className="[^"]*text-balance/);
     assert.doesNotMatch(source, /CarouselArrow|<button|text-center|useState|useEffect|ResizeObserver/);
     assert.match(source, /tabIndex=\{0\}/);
     assert.match(source, /onKeyDown/);
     assert.match(source, /event.target !== event.currentTarget/);
+    assert.match(source, /<CarouselControls\s/);
   }
+  const controls = read("src/components/ui/carousel-controls.tsx");
+  assert.match(controls, /className="hidden[^"\n]*md:flex"/);
+  assert.match(controls, /direction="previous"/);
+  assert.match(controls, /direction="next"/);
+  assert.match(controls, /aria-controls=\{trackId\}/);
+  assert.match(controls, /disabled=\{!available.previous\}/);
+  assert.match(controls, /disabled=\{!available.next\}/);
 });
 
 test("Challenge targets three mobile lines without clipping text or changing desktop breaks", () => {

@@ -19,7 +19,7 @@ type BarLayer = {
 };
 
 const engravedInk = {
-  href: "/assets/images/key-metrics/engraved-ink.png",
+  href: "/assets/images/key-metrics/engraved-ink.webp",
   width: 381.829,
   height: 573.922,
   image: { width: 381.829, height: 573.922, preserveAspectRatio: "xMidYMid meet" },
@@ -29,7 +29,7 @@ const layers: Record<MetricBarVariant, BarLayer> = {
   surveys: { ...engravedInk, transform: "matrix(0.65505 0.755586 0.936275 -0.351267 -250 -115.4005)" },
   decisions: { ...engravedInk, transform: "matrix(0.65505 0.755586 0.936275 -0.351267 -263.666 -5.4005)" },
   visibility: {
-    href: "/assets/images/key-metrics/halftone-band.png",
+    href: "/assets/images/key-metrics/halftone-band.webp",
     transform: "matrix(0 1 -1 0 369.666 -126)",
     width: 275,
     height: 371,

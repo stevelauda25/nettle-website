@@ -135,7 +135,7 @@ export const openQuestions: ReviewNote[] = [
   {
     title: "Page background and text color",
     detail:
-      "No Figma variable defines them. The site currently uses warm-gray/100 (background) and warm-gray/900 (text), the most-used bound variables in the latest frames.",
+      "No Figma variable defines them. The site currently uses warm-gray/100 (background) and warm-gray/900 (text), the most-used bound variables in the latest frames. On pages with SiteHeader, only the underlying document canvas uses warm-gray/950 to match the announcement at the viewport edge; body and section backgrounds remain unchanged. Internal docs do not use this canvas exception.",
   },
   {
     title: "Semantic color tokens",

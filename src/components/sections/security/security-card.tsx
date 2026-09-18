@@ -20,7 +20,7 @@ export function SecurityCard({ id, title, children, visual, textureClassName = "
         sizes="(min-width: 1440px) 370px, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
         className={`pointer-events-none -z-10 object-cover opacity-5 ${textureClassName}`}
       />
-      <article aria-labelledby={id} className="flex h-full min-h-[460px] flex-col">
+      <article aria-labelledby={id} className="flex h-full min-h-[400px] flex-col md:min-h-[460px]">
         {visual}
         <div className="mt-auto flex flex-col gap-2.5 p-(--space-card-padding)" data-slot="security-card-content">
           <h3 id={id} className="text-body-large-medium text-white">{title}</h3>

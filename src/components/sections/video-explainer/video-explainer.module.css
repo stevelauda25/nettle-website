@@ -21,11 +21,11 @@
         --video-poster-height: calc((100vw - 2 * var(--grid-margin)) * 644 / 1144);
         --video-stage-height: calc(var(--video-poster-height) + 2 * var(--space-section-media));
         --video-scroll-distance: 20svh;
-        /* Current mobile header: 44px announcement + ~52px navbar.
+        /* Current mobile header: 40px announcement + ~52px navbar.
          * A midpoint-based inset creates a large blank area on tall phones.
          * Keep this allowance in sync with the Hero/header geometry.
          */
-        --video-pin-top: 6rem;
+        --video-pin-top: 5.75rem;
 
         height: calc(var(--video-stage-height) + var(--video-scroll-distance));
         view-timeline-inset: var(--video-pin-top) 0;

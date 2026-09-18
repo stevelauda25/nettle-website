@@ -13,7 +13,7 @@ type Recommendation = {
 
 const recommendations: Recommendation[] = [
   {
-    image: "fire-door-maintenance.png",
+    image: "fire-door-maintenance.webp",
     title: "Fire door maintenance",
     company: "Riverside Manufacturing",
     status: "In Progress",
@@ -71,8 +71,8 @@ export function PreventionVisual() {
                 alt=""
                 width={46}
                 height={46}
-                // This approved PNG stalls the local WebP optimizer; serve it intact.
-                unoptimized={recommendation.image === "fire-door-maintenance.png"}
+                // Lossless delivery copy: preserve the approved source pixels without recompression.
+                unoptimized={recommendation.image === "fire-door-maintenance.webp"}
                 className="size-[46px] shrink-0 rounded object-cover ring-[0.5px] ring-black/10"
               />
               <div className="flex min-w-0 flex-1 flex-col gap-1.5 text-[11px] leading-[1.1]">

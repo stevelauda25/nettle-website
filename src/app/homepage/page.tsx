@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { GridToggle, PageGridOverlay } from "@/components/layout/grid";
+import { GRID_QA_ENABLED, GridToggle, PageGridOverlay } from "@/components/layout/grid";
 import { SiteHeader } from "@/components/layout/site-header";
 import { BusinessLines } from "@/components/sections/business-lines";
 import { ChallengeToday } from "@/components/sections/challenge-today";
@@ -19,8 +19,8 @@ export const metadata: Metadata = {
 };
 
 export default async function HomepagePreview({ searchParams }: PageProps<"/homepage">) {
-  const { grid } = await searchParams;
-  const gridOn = grid === "true";
+  // Public builds must not become request-rendered for disabled QA tooling.
+  const gridOn = GRID_QA_ENABLED && (await searchParams).grid === "true";
 
   return (
     <>

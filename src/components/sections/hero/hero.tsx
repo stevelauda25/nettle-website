@@ -7,12 +7,12 @@ import { ProductDashboard } from "@/components/visuals/product-dashboard";
 // The 180px top padding in desktop Figma includes the 82px
 // site header, which is rendered in flow above this section.
 // Mobile: header + Hero fill the first viewport, not 100vh plus the header.
-// The current mobile header is ~96px (44px announcement + ~52px navbar).
-// Accounting for its 6rem height reduces excess space above the content.
+// The current mobile header is ~92px (40px announcement + ~52px navbar).
+// Accounting for its 5.75rem height reduces excess space above the content.
 // Min-height allows enlarged text to grow; retain symmetric inner padding.
 export function Hero() {
   return (
-    <section aria-labelledby="hero-heading" className="flex min-h-[calc(100vh-6rem)] items-center overflow-x-clip bg-white py-(--space-section-opening-end) md:block md:min-h-0 md:overflow-visible md:pt-(--space-section-opening-start)">
+    <section aria-labelledby="hero-heading" className="flex min-h-[calc(100vh-5.75rem)] items-center overflow-x-clip bg-white py-(--space-section-opening-end) md:block md:min-h-0 md:overflow-visible md:pt-(--space-section-opening-start)">
       <Container>
         <BrandAccent variant="field-inspection" className="absolute top-2 left-0 hidden xl:block" />
         <BrandAccent variant="commercial-properties" className="absolute top-2 right-0 hidden xl:block" />

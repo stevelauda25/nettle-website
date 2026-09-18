@@ -1,4 +1,4 @@
-import { GridToggle, PageGridOverlay } from "@/components/layout/grid";
+import { GRID_QA_ENABLED, GridToggle, PageGridOverlay } from "@/components/layout/grid";
 import { SiteHeader } from "@/components/layout/site-header";
 import { BusinessLines } from "@/components/sections/business-lines";
 import { ChallengeToday } from "@/components/sections/challenge-today";
@@ -13,8 +13,8 @@ import { Testimonial } from "@/components/sections/testimonial";
 import { VideoExplainer } from "@/components/sections/video-explainer/video-explainer";
 
 export default async function Home({ searchParams }: PageProps<"/">) {
-  const { grid } = await searchParams;
-  const gridOn = grid === "true";
+  // Public builds must not become request-rendered for disabled QA tooling.
+  const gridOn = GRID_QA_ENABLED && (await searchParams).grid === "true";
 
   return (
     <>

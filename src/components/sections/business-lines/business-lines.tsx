@@ -18,7 +18,7 @@ export function BusinessLines() {
       <BusinessLineCarousel>
         {businessLines.map((line) => (
           <li key={line.id} data-slot="business-line-card" className={`${styles.card} relative isolate overflow-hidden rounded-lg bg-white`}>
-            <Image src="/assets/images/business-lines/card-texture.png" alt="" fill sizes="(min-width: 1440px) 448px, (min-width: 768px) 50vw, 100vw" className="pointer-events-none -z-10 -scale-x-100 object-cover opacity-5 mix-blend-hard-light" />
+            <Image src="/assets/images/features/card-texture.png" alt="" fill sizes="(min-width: 1440px) 448px, (min-width: 768px) 50vw, 100vw" className="pointer-events-none -z-10 -scale-x-100 object-cover opacity-5 mix-blend-hard-light" />
             <article aria-labelledby={`business-line-${line.id}`}>
               <BusinessLineArtwork line={line} />
               <div className="flex flex-col gap-(--space-related-gap) px-(--space-card-padding) pt-(--space-card-padding) pb-[23.2px]">

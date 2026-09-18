@@ -2,6 +2,7 @@
 
 import { useRef, type ReactNode } from "react";
 import { Container, Grid } from "@/components/layout/grid";
+import { CarouselControls } from "@/components/ui/carousel-controls";
 import carouselStyles from "@/components/layout/grid/carousel.module.css";
 
 // The cards and their visual components remain server-rendered children.
@@ -32,10 +33,11 @@ export function FeaturesCarousel({ children }: { children: ReactNode }) {
     <>
       <Container>
         <Grid>
-          <div className="col-span-12 text-left lg:col-start-2 lg:col-end-12">
+          <div className="col-span-12 flex items-end justify-between gap-(--space-content-gap) text-left lg:col-start-2 lg:col-end-12">
             <h2 id="features-heading" className="text-heading-h3 max-w-[517px] text-balance text-black">
               The complete workspace for modern Loss Control.
             </h2>
+            <CarouselControls viewportRef={viewportRef} trackId="features-track" label="features" onMove={move} />
           </div>
         </Grid>
       </Container>

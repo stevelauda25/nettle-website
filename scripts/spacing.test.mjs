@@ -286,7 +286,7 @@ test("Optical exceptions, link spacing and desktop layout-height reservations ar
   assert.match(read("src/components/layout/site-header.tsx"), /md:px-2\.5/);
   assert.match(spacingExceptions.join(" "), /illustration-coordinate/);
   const hero = read("src/components/sections/hero/hero.tsx");
-  assert.match(hero, /flex min-h-\[calc\(100vh-6rem\)\] items-center/);
+  assert.match(hero, /flex min-h-\[calc\(100vh-5\.75rem\)\] items-center/);
   assert.match(hero, /md:block md:min-h-0/);
   assert.doesNotMatch(hero, /(?:[\s"])(?:h-screen|min-h-svh)(?:[\s"])/);
   assert.match(hero, /<ProductDashboard \/>/);
@@ -380,7 +380,7 @@ test("Mobile video pins below the header with symmetric compact-stage padding", 
   assert.match(motion, /--video-scroll-distance: 20svh;/);
   assert.match(motion, /--video-stage-height: calc\(var\(--video-poster-height\) \+ 2 \* var\(--space-section-media\)\)/);
   assert.match(motion, /height: calc\(var\(--video-stage-height\) \+ var\(--video-scroll-distance\)\)/);
-  assert.match(motion, /--video-pin-top: 6rem;/);
+  assert.match(motion, /--video-pin-top: 5\.75rem;/);
   assert.doesNotMatch(motion, /100dvh/);
   assert.match(motion, /position: sticky;\s*top: var\(--video-pin-top\)/);
   assert.match(motion, /view-timeline-inset: var\(--video-pin-top\) 0/);
@@ -396,7 +396,7 @@ test("Mobile video pins below the header with symmetric compact-stage padding", 
     close(track - stage, travel, "Pin distance equals animation distance");
     // Pin offset no longer grows with viewport height; scale stays centered
     // in the compact stage, rather than generating blank space above it.
-    const pinTop = 6 * 16;
+    const pinTop = 5.75 * 16;
     for (const progress of [0, 0.25, 0.5, 0.75, 1]) {
       const scaledPoster = poster * (0.95 + progress * 0.05);
       const posterInset = padding + (poster - scaledPoster) / 2;
@@ -413,14 +413,14 @@ test("Mobile video pins below the header with symmetric compact-stage padding", 
 
 test("Mobile Hero removes the extra header allowance from centered top space", () => {
   const hero = read("src/components/sections/hero/hero.tsx");
-  assert.match(hero, /min-h-\[calc\(100vh-6rem\)\]/);
+  assert.match(hero, /min-h-\[calc\(100vh-5\.75rem\)\]/);
   assert.match(hero, /items-center/);
   assert.match(hero, /py-\(--space-section-opening-end\)/);
   assert.match(hero, /md:min-h-0/);
-  // With content fitting, removing 96px from the centered frame reduces
-  // perceived top whitespace by 48px, rather than merely changing padding
+  // With content fitting, removing 92px from the centered frame reduces
+  // perceived top whitespace by 46px, rather than merely changing padding
   // that flex centering would redistribute back into the same empty space.
-  const viewport = 852, header = 96, content = 628;
+  const viewport = 852, header = 92, content = 628;
   const before = (viewport - content) / 2;
   const after = (viewport - header - content) / 2;
   close(before - after, header / 2, "Effective top-space reduction");
