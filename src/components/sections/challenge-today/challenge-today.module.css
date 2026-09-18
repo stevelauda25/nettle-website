@@ -1,0 +1,280 @@
+/* SCROLL STORYBOARD — progress refers to sticky travel, not viewport entry.
+ *    0–8%  State 01 fades into focus. 8–20%: sharp reading window.
+ *   9–19%  Its underline draws left → right, then holds through the copy exit.
+ *  20–32%  State 01 blurs out. 32–44%: State 02 fades into focus.
+ *  45–55%  State 02 marker: upper stroke →, turn down, lower stroke ←.
+ *  44–56%  State 02 reads; centers retain Figma paths, zoom stays depth-specific.
+ *  56–68%  State 02 and completed marker blur out. 68–80%: State 03 enters.
+ *  81–91%  State 03 marker follows the same two-stroke sequence.
+ * 80–100%  State 03 reads; camera settles at 85%, marker completes at 91%.
+ * 91–100%  Hold the complete final composition, then release naturally.
+ * Copy scales up to 1 on entry and down on exit, with opacity/blur sharing
+ * smoothstep easing. Each outgoing state reaches zero opacity before the
+ * next becomes visible (32% and 68% handoffs); no overlapping crossfade.
+ * Scale never exceeds 1, preserving the approved reading composition.
+ * Scroll reverses this same sequence. No clock-based transitions or JS.
+ * Center travel and image zoom are separate transform-only tracks. An outer
+ * layer preserves entrance paths; its inner tile scales around its own center.
+ * Foreground images retain more zoom distance in the second half, instead of
+ * every image converging at the middle statement. challenge-data.ts derives
+ * two Hermite/Bezier segments per image: role (30%), apparent size (35%),
+ * camera distance (35%). Large peripheral images continue zooming faster;
+ * small background details settle gently. Matched segment slopes avoid a
+ * speed reset at 50%, then settle
+ * to zero at 85%. Below md, variation from the neutral curve is halved.
+ * Travel is 210svh mobile / 280svh md+: a compact three-beat sequence.
+ * Contra's published Experts triggers total 210vh (50 + 80 + 80); these are
+ * adapted Nettle settings, with extra desktop copy room, not measured timing.
+ * All choreography stays synchronized on the shorter track.
+ * Marker sweeps use constant progress rather than a mid-stroke speed burst.
+ * Native scroll speed still controls elapsed time.
+ */
+.track {
+  /* Existing header geometry: mobile 40 + 52; md+ 32 + 52. */
+  --challenge-pin-top: 5.75rem;
+  --challenge-stage-height: calc(100svh - var(--challenge-pin-top));
+  --challenge-scroll-distance: 210svh;
+  --challenge-copy-blur: 6px;
+  --challenge-copy-scale-hidden: 0.96;
+  --challenge-copy-ease: cubic-bezier(0.3333333333, 0, 0.6666666667, 1);
+  --challenge-marker-ease: linear;
+}
+
+.stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: var(--challenge-stage-height);
+  padding-block: var(--space-section-standard);
+}
+
+.visual {
+  overflow: hidden;
+}
+
+.contentGrid {
+  row-gap: var(--space-section-standard);
+}
+
+.state {
+  /* No visibility/display hiding: each unique statement stays readable to AT. */
+  opacity: 1;
+  filter: none;
+  transform: none;
+  transform-origin: center;
+}
+
+.underline {
+  /* Reveal the original irregular marker silhouette, never squash/stretch it.
+   * Default is complete for reduced motion, short screens and no timelines. */
+  clip-path: inset(0 0 0 0);
+  /* Six matching vertices keep interpolation continuous. The diagonal seam
+   * follows the gap between the original SVG's upper and returning strokes.
+   * Only the reveal changes: the complete export remains untouched. */
+  --marker-hidden: polygon(0% 0%, 0% 0%, 0% var(--marker-divider-left), 0% var(--marker-divider-left), 0% var(--marker-divider-left), 0% var(--marker-divider-left));
+  --marker-outbound: polygon(0% 0%, 100% 0%, 100% var(--marker-divider-right), 100% var(--marker-divider-right), 100% var(--marker-divider-right), 0% var(--marker-divider-left));
+  --marker-turn: polygon(0% 0%, 100% 0%, 100% 100%, 100% 100%, 100% var(--marker-divider-right), 0% var(--marker-divider-left));
+  --marker-complete: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 0% var(--marker-divider-left), 0% var(--marker-divider-left));
+}
+
+/* Asset-coordinate separators, not text-layout breakpoints. State 01 has
+ * one stroke; States 02/03 have a sloping return in their approved exports. */
+.state[data-state="state-2"] .underline {
+  --marker-divider-left: 50%;
+  --marker-divider-right: 25%;
+}
+
+.state[data-state="state-3"] .underline {
+  --marker-divider-left: 65%;
+  --marker-divider-right: 17%;
+}
+
+.artwork {
+  display: none;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  container-type: size;
+}
+
+.artworkFrame {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(100cqw, calc(100cqh * 1440 / 928));
+  transform: translate(-50%, -50%);
+}
+
+.collage {
+  position: absolute;
+  inset: 0;
+}
+
+.layer {
+  --challenge-ease-first: var(--challenge-ease-first-mobile);
+  --challenge-ease-second: var(--challenge-ease-second-mobile);
+  transform: translate(var(--challenge-travel-start));
+}
+
+.tile {
+  --challenge-scale-middle: var(--challenge-zoom-middle-mobile);
+  --challenge-ease-first: var(--challenge-zoom-first-mobile);
+  --challenge-ease-second: var(--challenge-zoom-second-mobile);
+  transform-origin: center;
+  transform: scale(var(--challenge-scale-start));
+}
+
+@media (width >= 48rem) {
+  .track {
+    --challenge-pin-top: 5.25rem;
+    --challenge-scroll-distance: 280svh;
+    --challenge-copy-blur: 8px;
+    --challenge-copy-scale-hidden: 0.94;
+  }
+
+  .layer {
+    --challenge-ease-first: var(--challenge-ease-first-desktop);
+    --challenge-ease-second: var(--challenge-ease-second-desktop);
+  }
+
+  .tile {
+    --challenge-scale-middle: var(--challenge-zoom-middle-desktop);
+    --challenge-ease-first: var(--challenge-zoom-first-desktop);
+    --challenge-ease-second: var(--challenge-zoom-second-desktop);
+  }
+}
+
+/* Static normal-flow content is the default, including no-JS browsers.
+ * Native timelines progressively enhance without hydration or feature JS.
+ * Short/zoomed viewports avoid trapping tall copy in an undersized stage.
+ */
+@supports (animation-timeline: view()) and (animation-range: exit-crossing 0px exit-crossing 100px) {
+  @media (prefers-reduced-motion: no-preference) and (height >= 30rem) {
+    .track {
+      view-timeline-name: --challenge-today;
+      view-timeline-axis: block;
+      view-timeline-inset: var(--challenge-pin-top) 0;
+    }
+
+    .track::after {
+      content: "";
+      display: block;
+      height: var(--challenge-scroll-distance);
+    }
+
+    .stage {
+      position: sticky;
+      top: var(--challenge-pin-top);
+      /* Stage can grow with live text; the following spacer still supplies
+       * exactly the same sticky travel. Only decorative layers clip. */
+      padding-block: var(--space-content-block-gap);
+    }
+
+    .contentGrid {
+      row-gap: 0;
+    }
+
+    .artwork {
+      display: block;
+    }
+
+    .state {
+      grid-row: 1;
+    }
+
+    .state[data-state="state-1"] { animation-name: state-one; }
+    .state[data-state="state-2"] { animation-name: state-two; }
+    .state[data-state="state-3"] { animation-name: state-three; }
+    .state[data-state="state-1"] .underline { animation-name: underline-one; }
+    .state[data-state="state-2"] .underline { animation-name: underline-two; }
+    .state[data-state="state-3"] .underline { animation-name: underline-three; }
+    .tile { animation-name: pull-back; }
+    .layer { animation-name: travel-back; }
+
+    .state,
+    .underline,
+    .layer,
+    .tile {
+      animation-duration: auto;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: --challenge-today;
+      animation-range: exit-crossing 0px exit-crossing var(--challenge-scroll-distance);
+    }
+
+    .state {
+      animation-timing-function: var(--challenge-copy-ease);
+    }
+
+    .underline {
+      animation-timing-function: var(--challenge-marker-ease);
+    }
+  }
+}
+
+@keyframes state-one {
+  0% { opacity: 0; filter: blur(var(--challenge-copy-blur)); transform: scale(var(--challenge-copy-scale-hidden)); }
+  8%, 20% { opacity: 1; filter: blur(0px); transform: scale(1); }
+  32%, 100% { opacity: 0; filter: blur(var(--challenge-copy-blur)); transform: scale(var(--challenge-copy-scale-hidden)); }
+}
+
+@keyframes state-two {
+  0%, 32% { opacity: 0; filter: blur(var(--challenge-copy-blur)); transform: scale(var(--challenge-copy-scale-hidden)); }
+  44%, 56% { opacity: 1; filter: blur(0px); transform: scale(1); }
+  68%, 100% { opacity: 0; filter: blur(var(--challenge-copy-blur)); transform: scale(var(--challenge-copy-scale-hidden)); }
+}
+
+@keyframes state-three {
+  0%, 68% { opacity: 0; filter: blur(var(--challenge-copy-blur)); transform: scale(var(--challenge-copy-scale-hidden)); }
+  80%, 100% { opacity: 1; filter: blur(0px); transform: scale(1); }
+}
+
+/* Single strokes wipe left → right. Two-stroke exports reveal the upper
+ * band first, turn at the right edge, then uncover the lower band right → left.
+ * Each draw uses 10% of travel and then holds its complete shape. The parent
+ * supplies the exact same opacity/blur exit to both copy and marker; no erase.
+ * The final marker stays drawn through release.
+ * Reversing scroll retraces this timeline rather than triggering a timed replay. */
+@keyframes underline-one {
+  0%, 9% { clip-path: inset(0 100% 0 0); }
+  19%, 100% { clip-path: inset(0 0% 0 0); }
+}
+
+@keyframes underline-two {
+  0%, 45% { clip-path: var(--marker-hidden); }
+  51% { clip-path: var(--marker-outbound); }
+  52% { clip-path: var(--marker-turn); }
+  55%, 100% { clip-path: var(--marker-complete); }
+}
+
+@keyframes underline-three {
+  0%, 81% { clip-path: var(--marker-hidden); }
+  87% { clip-path: var(--marker-outbound); }
+  88% { clip-path: var(--marker-turn); }
+  91%, 100% { clip-path: var(--marker-complete); }
+}
+
+@keyframes pull-back {
+  0% {
+    transform: scale(var(--challenge-scale-start));
+    animation-timing-function: var(--challenge-ease-first);
+  }
+  50% {
+    transform: scale(var(--challenge-scale-middle));
+    animation-timing-function: var(--challenge-ease-second);
+  }
+  85%, 100% { transform: scale(var(--challenge-scale-end)); }
+}
+
+@keyframes travel-back {
+  0% {
+    transform: translate(var(--challenge-travel-start));
+    animation-timing-function: var(--challenge-ease-first);
+  }
+  50% {
+    transform: translate(var(--challenge-travel-middle));
+    animation-timing-function: var(--challenge-ease-second);
+  }
+  85%, 100% { transform: translate(0px, 0px); }
+}

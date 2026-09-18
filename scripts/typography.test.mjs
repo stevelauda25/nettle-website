@@ -176,18 +176,19 @@ test("Carousel headings stay left-aligned and balanced with desktop-only control
 
 test("Challenge targets three mobile lines without clipping text or changing desktop breaks", () => {
   const source = read("src/components/sections/challenge-today/challenge-today.tsx");
-  assert.match(source, /firstLine: "90% of your time is spent at the desk\."/);
-  assert.match(source, /secondLineLead: "Your expertise "/);
-  assert.match(source, /emphasis: "belongs in the field\."/);
+  const data = read("src/components/sections/challenge-today/challenge-data.ts");
+  assert.match(data, /firstLine: "90% of your time is spent at the desk\."/);
+  assert.match(data, /secondLineLead: "Your expertise "/);
+  assert.match(data, /emphasis: "belongs in the field\."/);
   assert.match(source, /<br className="hidden md:block" \/>\s*\{" "\}/);
   assert.match(source, /<span className="inline-block">\{state.secondLineLead.trim\(\)\}<\/span>\s*\{" "\}/);
   assert.match(source, /className="relative inline-block text-brand-50"/);
-  assert.match(source, /state-1-underline\.svg/);
+  assert.match(data, /state-1-underline\.svg/);
   assert.doesNotMatch(source, /line-clamp|truncate|whitespace-nowrap/);
   assert.match(source, /text-display-statement text-balance/);
   assert.match(source, /max-md:\[--grid-margin:var\(--space-related-gap\)\]/);
   assert.equal(property("--space-related-gap"), "0.75rem");
-  assert.match(source, /<Container className="h-full">/);
+  assert.match(source, /<Container>/);
   const display = sizeRule(typographyStyles.find((s) => s.className === "text-display-statement"));
   close(display.at(390), 32, "Refined mobile minimum");
   close(display.at(1440), 54, "Unchanged desktop maximum");

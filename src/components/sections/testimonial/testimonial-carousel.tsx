@@ -1,6 +1,7 @@
 "use client";
 
-import { useRef, type ReactNode } from "react";
+import { type ReactNode } from "react";
+import { useCarousel } from "@/components/ui/use-carousel";
 import { Container, Grid } from "@/components/layout/grid";
 import { CarouselControls } from "@/components/ui/carousel-controls";
 import carouselStyles from "@/components/layout/grid/carousel.module.css";
@@ -8,15 +9,7 @@ import styles from "./testimonial.module.css";
 
 // Button and keyboard navigation need a client ref; content/artwork are server children.
 export function TestimonialCarousel({ children }: { children: ReactNode }) {
-  const viewportRef = useRef<HTMLDivElement>(null);
-
-  function move(direction: -1 | 1) {
-    const viewport = viewportRef.current;
-    if (!viewport) return;
-    const maximum = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
-    // Both approved slides occupy the full ten-column content band.
-    viewport.scrollTo({ left: direction === 1 ? maximum : 0, behavior: "instant" });
-  }
+  const { viewportRef, available, move } = useCarousel("[data-slot='testimonial-card']");
 
   return (
     <>
@@ -24,7 +17,7 @@ export function TestimonialCarousel({ children }: { children: ReactNode }) {
         <Grid>
           <div className="col-span-12 flex items-end justify-between gap-(--space-content-gap) text-left lg:col-start-2 lg:col-end-12">
             <h2 id="testimonial-heading" className="text-heading-h3 max-w-[408px] text-balance text-black">Do what previously seemed impossible</h2>
-            <CarouselControls viewportRef={viewportRef} trackId="testimonial-track" label="testimonials" onMove={move} />
+            <CarouselControls available={available} trackId="testimonial-track" label="testimonials" onMove={move} />
           </div>
         </Grid>
       </Container>

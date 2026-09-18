@@ -279,7 +279,6 @@ test("Optical exceptions, link spacing and desktop layout-height reservations ar
     "solutions-by-role/role-card": ["grid-rows-[minmax(108px,auto)_auto_minmax(81px,auto)]", "pb-7"],
     "testimonial/testimonial": ["min-h-[516px]", "aspect-[1144/516]"],
     "cta/cta": ["min-h-[527px]"],
-    "challenge-today/challenge-today": ["h-screen"],
     "footer/footer": ["flex flex-col gap-6", "flex flex-wrap gap-4", "before:-inset-y-2"],
   };
   for (const [file, values] of Object.entries(expectations)) for (const value of values) assert.ok(read("src/components/sections/" + file + ".tsx").includes(value), file + ": " + value);
