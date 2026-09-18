@@ -57,6 +57,7 @@ Internal review pages (development only, not indexed):
 | `/design-system` | Color, typography and grid foundation, plus design review notes |
 | `/homepage` | Homepage preview with a grid overlay toggle |
 | `/?grid=true` | Homepage with the column overlay enabled |
+| `/motion-lab` | Motion Lab: previews production sections at real viewport sizes for motion work. `next dev` only; a production build returns 404 and bundles none of it |
 
 The **Grid** toggle and overlays run locally and on builds with `NEXT_PUBLIC_REVIEW_MODE=true` (staging and Vercel previews); they are stripped when that flag is off.
 

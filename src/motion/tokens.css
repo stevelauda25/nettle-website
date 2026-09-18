@@ -1,0 +1,12 @@
+/* Motion tokens.
+ * Production-safe defaults a motion sheet may reference. Loaded by MotionScope,
+ * so they exist only on pages that render a scope. Values are starting points
+ * for Concepts, not approved motion; nothing on the homepage uses them yet. */
+:root {
+  --motion-duration-fast: 160ms;
+  --motion-duration-base: 320ms;
+  --motion-duration-slow: 600ms;
+  --motion-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --motion-stagger: 60ms;
+}
